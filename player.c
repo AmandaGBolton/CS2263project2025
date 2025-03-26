@@ -1,21 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <inventory.h>
-#include <item.h>
+#include "player.h"
+#include "item.h"
+#include "inventory.h"
 
-typedef struct {
-    int hp;
-    int att;
-    int def;
-    int agl;
-    int gold;
-    Inventory inventory[20];
-    char name[21];
-} Player;
-
-// Saving player should record current stats (incld HP) and inventory
-
+// Free?
 
 // Function to free a player from memory (e.g., on death)
 void freePlayer(Player *player) {
@@ -45,9 +35,9 @@ Player *createPlayer(int hp, int att, int def, int agl, int gold, char* name) {
 // Also figure out inventory items in general so they have stats (type Item)
 // Ideally import Item, make copy of desired item to add to player inventory
 void *equipStartingPlayer(Player *player) {
-    Item sword = createSword();
-    Item armor = createArmor();
-    Item potion = createPotion();
+    Item * sword = createSword();
+    Item * armor = createArmor();
+    Item * potion = createPotion();
     // Need to add these to player inventory in some way
     pickUpItem(player.inventory, sword);
     pickUpItem(player.inventory, armor);
@@ -63,7 +53,7 @@ void heal(Player *player, int hpRegained){
     if (currentHP>20) {
         currentHP = 20;
     }
-    player.hp -> currentHP;
+    player->hp = currentHP;
 }
 
 void isPlayerDead(Player *player, int damage){
@@ -73,7 +63,7 @@ void isPlayerDead(Player *player, int damage){
         printf("You have died!\n");
         freePlayer(&player);
     } else {
-        player.hp-> currentHP;
+        player->hp = currentHP;
         printf("You were hit for %d damage.\n", damage);
     }
 }
