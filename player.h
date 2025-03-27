@@ -8,7 +8,7 @@ typedef struct Player {
     int agl;
     int gold;
     struct Inventory ** inventory;
-    char name[21];
+    char * name;
 } Player;
 
 void freePlayer(Player *player);
