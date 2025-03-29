@@ -28,10 +28,13 @@ void freeTrap(Trap * trap){
     free(trap->prompt);
     free(trap->failStory);
     free(trap->successStory);
+    free(trap->reward);
     free(trap);
 }
 
+// This runs the trap scenario and handles the die roll and outcome
 void attemptTrap(Player * player, Trap * trap){
+    printf("%s\n", trap->prompt);
     int savingThrowMod = 0;
     if (strcmp(trap->damageType, "AGILITY") == 0){
         savingThrowMod = player->agl;
@@ -44,6 +47,9 @@ void attemptTrap(Player * player, Trap * trap){
     }
 
     int savingThrow = getRandomNumber() + savingThrowMod;
+    
+    printf("You rolled a %d including your +%d modifier.\n", savingThrow, savingThrowMod);
+
     if (savingThrow >= trap->savingThrowReq){
         printf("%s\n", trap->successStory);
         if (trap->reward != NULL){

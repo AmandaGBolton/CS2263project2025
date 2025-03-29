@@ -4,15 +4,13 @@
 typedef struct Item {
     char* stat;
     int mod;
-    char name[21];
+    char *name;
 } Item;
 
 void freeItem(Item *item);
 Item *createItem(char * stat, int mod, char* name);
-
-Item * generateItem(char * itemType);
-
-Item getLowItem();
-Item getMidItem();
-Item getHighItem();
+Item * generateItem(char * itemType, int num);
+Item * getLowItem();
+Item * getMidItem();
+Item * getHighItem();
 #endif

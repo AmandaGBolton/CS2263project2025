@@ -9,7 +9,9 @@
 
 // Function to free a player from memory (e.g., on death)
 void freePlayer(Player *player) {
+    // Need to free inventory in whatever way is appropriate^
     // free(player->inventory);
+    free(player->name);
     free(player);
 }
 
@@ -47,7 +49,7 @@ void *equipStartingPlayer(Player *player) {
 
 // Heal for the given number of HP, checking against max HP
 void heal(Player *player, int hpRegained){
-    int currentHP = player.hp;
+    int currentHP = player->hp;
     currentHP += 5;
     //Check if over max and reduce if needed
     if (currentHP>20) {
@@ -57,14 +59,14 @@ void heal(Player *player, int hpRegained){
 }
 
 void isPlayerDead(Player *player, int damage){
-    int currentHP = player.hp;
+    int currentHP = player->hp;
     currentHP -= damage;
     if (currentHP <= 0){
         printf("You have died!\n");
-        freePlayer(&player);
+        freePlayer(player);
     } else {
         player->hp = currentHP;
-        printf("You were hit for %d damage.\n", damage);
+        printf("You were hit for %d damage. You have %d HP left.\n", damage, currentHP);
     }
 }
 
@@ -110,7 +112,7 @@ int main() {
     }
     printf("Welcome to the game %c!\n", playerName);
     
-    struct Player currentPlayer;
+    struct Player * currentPlayer;
     currentPlayer = createPlayer(20, 1, 1, 0, 5, playerName);
     
     return 0;

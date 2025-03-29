@@ -3,7 +3,7 @@
 #include <string.h>
 #include "item.h"
 
-// Saving player should record current stats (incld HP) and inventory
+// Saving player should record current stats (incld HP) and inventory^
 
 int getRandomNumber();
 
@@ -13,15 +13,8 @@ void freeItem(Item *item) {
 }
 
 // Function to create an Item
-Item *createItem(char * stat, int mod, char* name) {
-    if (stat == "GOLD"){
-        // Add it to current gold item, adding num/mod to current value
-    }
-
-    if (name == "potion belt"){
-        // Add num/mod to current potions
-    }
-
+// GOLD and POTTIONS are stackable, so in Inventory need to stack them
+Item * createItem(char * stat, int mod, char* name) {
     Item *item = (Item *)malloc(sizeof(Item));
     if (!item) {
         printf("Memory allocation for item creation failed!\n");
@@ -33,129 +26,98 @@ Item *createItem(char * stat, int mod, char* name) {
     return item;
 }
 
-Item * generateItem(char itemType, int num){
-    // Use switch to create appropriate item instead of all the separate methods below
-    switch(itemType) {
+// Statement to create an item based on type and number, calls main item constructor
+// Pass in the name of what you want and how many
+// Method uses a helper to translate string into char used by switch
+Item * generateItem(char * itemType, int num){
+    char desiredItem = getItemType(itemType);
+
+    switch(desiredItem) {
         case 'p':
-            return createPotion();
+            Item * item = createItem('HP', 1, "healing potion");
+            return item;
         case 'r':
-            return createAgilityRing();
+            Item * item = createItem('AGL', 1, "agility ring");
+            return item;
         case 'g':
-            return createAgilityAmulet();
+            Item * item = createItem('AGL', 2, "agility amulet");
+            return item;
         case 't':
-            return createStrengthAmulet();
+            Item * item = createItem('ATT', 2, "strength amulet");
+            return item;
         case 's':
-            return createSword();
+            Item * item = createItem('ATT', 1, "sword");
+            return item;
         case 'b':
-            return createBronzeSword();
+            Item * item = createItem('ATT', 2, "bronze sword");
+            return item;
         case 'i':
-            return createIronSword();
+            Item * item = createItem('ATT', 3, "iron sword");
+            return item;
         case 'm':
-            return createMythicSword();
+            Item * item = createItem('ATT', 4, "mythic sword");
+            return item;
         case 'A':
-            return createArmor();
+            Item * item = createItem('DEF', 1, "armor");
+            return item;
         case 'B':
-            return createBronzeArmor();
+            Item * item = createItem('DEF', 2, "bronze armor");
+            return item;
         case 'I"':
-            return createIronArmor();
+            Item * item = createItem('DEF', 3, "iron armor");
+            return item;
         case 'M':
-            return createMythicArmor();
+            Item * item = createItem('DEF', 4, "mythic armor");
+            return item;
         case 'c':
-            return createCoinPurse(num);
+            Item * item = createItem('GOLD', num, "coin purse");
+            return item;
         case 'P':
-            return createPotionBelt(num);
+            Item * item = createItem('POTION', num, "potion belt");
+            return item;
         default:
             printf("Invalid item type.\n");
             return NULL;
     }
 }
 
+char desiredItem(char * itemName) {
+     if(itemName == "potion") {
+        return 'p';
+    } else if(itemName == "agility ring") {
+        return 'r';
+    } else if(itemName == "agility amulet") {
+        return 'g';
+    } else if(itemName == "strength amulet") {
+        return 't';
+    } else if(itemName == "sword") {
+        return 's';
+    } else if(itemName == "bronze sword") {
+        return 'b';
+    } else if(itemName == "iron sword") {
+        return 'i';
+    } else if(itemName == "mythic sword") {
+        return 'm';
+    } else if(itemName == "armor") {
+        return 'A';
+    } else if(itemName == "bronze armor") {
+        return 'B';
+    } else if(itemName == "iron armor") {
+        return 'I';
+    } else if(itemName == "mythic armor") {
+        return 'M';
+    } else if(itemName == "coin purse") {
+        return 'c';
+    } else if(itemName == "potion belt") {
+        return 'P';
+    } else {
+        printf("Invalid item name.\n");
+        return NULL;
+    }
+}
+     
 // These can be created as needed to make a new copy of the item
-// Gold is not part of this. It is a variable with its own value.
-
-// Create Potion
-Item *createPotion() {
-    Item * item = createItem('HP', 5, "healing potion");
-    return item;
-}
-
-// Create Agility Ring
-Item *createAgilityRing() {
-    Item * item = createItem('AGL', 1, "agility ring");
-    return item;
-}
-
-// Create Agility Amulet
-Item *createAgilityAmulet() {
-    Item * item = createItem('AGL', 2, "agility amulet");
-    return item;
-}
-
-// Create Strength Amulet
-Item *createStrengthAmulet() {
-    Item * item = createItem('ATT', 2, "strength amulet");
-    return item;
-}
-
-// Create starter Sword
-Item *createSword() {
-    Item * item = createItem('ATT', 1, "sword");
-    return item;
-}
-
-// Create Bronze Sword
-Item *createBronzeSword() {
-    Item * item = createItem('ATT', 2, "bronze sword");
-    return item;
-}
-
-// Create Iron Sword
-Item *createIronSword() {
-    Item * item = createItem('ATT', 3, "iron sword");
-    return item;
-}
-
-// Create Mythic Sword
-Item *createMythicSword() {
-    Item * item = createItem('ATT', 4, "mythic sword");
-    return item;
-}
-
-// Create starter Armor
-Item *createArmor() {
-    Item * item = createItem('DEF', 1, "armor");
-    return item;
-}
-
-// Create Bronze Armor
-Item *createBronzeArmor() {
-    Item * item = createItem('DEF', 2, "bronze armor");
-    return item;
-}
-
-// Create Iron Armor
-Item *createIronArmor() {
-    Item * item = createItem('DEF', 3, "iron armor");
-    return item;
-}
-
-// Create Mythic Armor
-Item *createMythicArmor() {
-    Item * item = createItem('DEF', 4, "mythic armor");
-    return item;
-}
-
-// Create gold, turn this into inventory gold
-Item *createCoinPurse(int gold) {
-    Item * item = createItem('GOLD', gold, "coin purse");
-    return item;
-}
-
-// Create multiple potions, turn this into inventory potions
-Item *createPotionBelt(int numPotions) {
-    Item * item = createItem('HP', numPotions, "potion belt");
-    return item;
-}
+// Gold generated using the coin purse.
 
 Item * getLowItem(){
     Item * item;
@@ -163,19 +125,19 @@ Item * getLowItem(){
     int r = getRandomNumber();
     switch(r){
         case 0 ... 19:
-            item = createPotion();
+            item = generateItem("potion", 1);
             break;
         case 20 ... 39:
-            item = createAgilityRing();
+            item = generateItem("agility ring", 1);
             break;
         case 40 ... 59:
-            item = createBronzeSword();
+            item = generateItem("sword", 1);
             break;
         case 60 ... 79:
-            item = createBronzeArmor();
+            item = generateItem("bronze armor", 1);
             break;
         default:
-            item = createCoinPurse(5);
+            item = generateItem("coin purse", 5);
             break;
     }
     return item;
@@ -187,19 +149,19 @@ Item * getMidItem(){
 
     switch(r){
         case 0 ... 19:
-            item = createPotionBelt(2);
+            item = generateItem("potion belt", 2);
             break;
         case 20 ... 39:
-            item = createAgilityAmulet();
+            item = generateItem("agility amulet", 1);
             break;
         case 40 ... 59:
-            item = createIronSword();
+            item = generateItem("iron sword", 1);
             break;
         case 60 ... 79:
-            item = createIronArmor();
+            item = generateItem("iron armor", 1);
             break;
         default:
-            item = createCoinPurse(10);
+            item = generateItem("coin purse", 10);
             break;
     }
     return item;
@@ -211,19 +173,19 @@ Item * getHighItem(){
 
     switch (r) {
     case 0 ... 19:
-        item = createPotionBelt(5);
+        item = generateItem("potin belt", 5);
         break;
     case 20 ... 39:
-        item = createStrengthAmulet();
+        item = generateItem("strength amulet", 1);
         break;
     case 40 ... 59:
-        item = createMythicSword();
+        item = generateItem("mythic sword", 1);
         break;
     case 60 ... 79:
-        item = createMythicArmor();
+        item = generateItem("mythic armor", 1);
         break;
     default:
-        item = createCoinPurse(20);
+        item = generateItem("coin purse", 20);
         break;
     }
     return item;

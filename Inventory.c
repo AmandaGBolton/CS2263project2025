@@ -1,57 +1,123 @@
 #include <stdio.h>
 #include <string.h>
+#include "item.h"
+#include "inventory.h"
+#include "player.h"
 
-#define INVENTORY_SIZE 20
+// No size to make it easier. Is a linked list that easily expands.
 
-// struct for inventory
-typedef struct Inventory {
-    char *items[INVENTORY_SIZE];  // array of items
-    int size;  // number of items in inventory
-} Inventory;
-
-// initializes inventory
-void initializeInventory(Inventory *inventory) {
-    inventory->size = 0;
+// create inventory node
+Inventory * createInventoryNode(Item * item, Inventory * prev, Inventory * next) {
+    Inventory *inventory = (Inventory *)malloc(sizeof(Inventory));
+    if (!inventory) {
+        printf("Memory allocation for inventory failed!\n");
+        exit(1);
+    }
+    inventory->item = item;
+    inventory->prev = prev;
+    inventory->next = next;
+    return inventory;
 }
 
-// adds to inventory with checks for size, prints item that was picked up
-void pickUpItem(Inventory *inventory, const char *itemName) {
-    if (inventory->size < INVENTORY_SIZE) {
-        inventory->items[inventory->size] = (char *)itemName;
-        inventory->size++;
-        printf("Picked up: %s\n", itemName);
+void freeInventory(Inventory *inventory) {
+    // While items are in inventory free each item
+    Inventory * temp = inventory;
+    while (temp != NULL) {
+        Inventory * next = temp->next;
+        freeItem(temp->item);
+        free(temp);
+        temp = next;
     }
+}
+ 
+// initializes inventory, gold and potion are always first for fast searching
+void starterInventory(Player *player) {
+    Item * sword = generateItem("sword", 1);
+    Item * armor = generateItem("armor", 1);
+    Item * potion = generateItem("potion", 1);
+    Item * gold = generateItem("gold", 5);
+    Inventory * node1 = createInventoryNode(gold, NULL, NULL);
+    Inventory * node2 = createInventoryNode(potion, node1, NULL);
+    node1->next = node2;
+    Inventory * node3 = createInventoryNode(armor, node2, NULL);
+    node2->next = node3;
+    Inventory * node4 = createInventoryNode(sword, node3, NULL);
+    node3->next = node4;
+    player->inventory = node1;
+}
+
+// Adds to the end of the inventory
+void addToInventory(Inventory *inventory, Item *item) {
+    Inventory * node = createInventoryNode(item, NULL, NULL);
+    Inventory * temp = inventory;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = node;
+    node->prev = temp;
+}
+
+// adds to inventory and prints item that was picked up
+void pickUpItem(Player *player, Item * item) {
+    if (player->inventory == NULL) {
+        player->inventory = createInventoryNode(item, NULL, NULL);
+    } else {
+        addToInventory(player->inventory, item);
+    }    
+    printf("Picked up: %s\n", item->name);
+    
+    
 }
 
 // remove item from inventory
-void dropItem(Inventory *inventory, const char *itemName) {
-    int foundIndex = -1;
-    for (int i = 0; i < inventory->size; i++) {
-        if (strcmp(inventory->items[i], itemName) == 0) {
-            foundIndex = i;
-            break;
+void dropItem(Inventory *inventory, Item *itemName, int num) {
+    // When gold or potion, only subtract from total in item to a max low of 0
+    if(itemName == "gold" || itemName == "potion") {
+        Inventory * temp = inventory;
+        while (temp != NULL) {
+            if (temp->item == itemName) {
+                temp->item->mod -= num;
+                if (temp->item->mod < 0) {
+                    temp->item->mod = 0;
+                }
+                return;
+            }
+            temp = temp->next;
         }
     }
 
-    if (foundIndex != -1) {
-        // fixes array moving stuff to the left one and corrects size variable
-        for (int i = foundIndex; i < inventory->size - 1; i++) {
-            inventory->items[i] = inventory->items[i + 1];
+    // Any other items, remove from inventory
+    Inventory * temp = inventory;
+    while (temp != NULL) {
+        if (temp->item == itemName) {
+            if (temp->prev != NULL) {
+                temp->prev->next = temp->next;
+            }
+            if (temp->next != NULL) {
+                temp->next->prev = temp->prev;
+            }
+            freeItem(temp->item);
+            free(temp);
+            return;
         }
-        inventory->size--;
-        printf("Dropped: %s\n", itemName);
+        temp = temp->next;
     }
+    printf("Item not found in inventory.\n");
 }
 
-// function to display inventory
+// function to display inventory printing its contents in order
 void displayInventory(Inventory *inventory) {
-    if (inventory->size == 0) {
-        printf("Inventory is empty.\n");
-        return;
+    printf("Inventory: ");
+    Inventory * temp = inventory;
+    while (temp != NULL) {
+        if(inventory->item->name == "gold") {
+            printf("%d gold ", temp->item->mod);
+        } else if(inventory->item->name == "potion") {
+            printf("%d potions ", temp->item->mod);
+        } else {
+        printf("%s ", temp->item->name);
+        temp = temp->next;
     }
-
-    printf("Inventory contents:\n");
-    for (int i = 0; i < inventory->size; i++) {
-        printf("- %s\n", inventory->items[i]);
+    printf("\n");   
     }
 }
