@@ -7,3 +7,9 @@ int getRandomNumber() {
     int num = rand()%100 + 1;
     return num;
 }
+
+int getRandomNumber20() {
+    srand(time(NULL));
+    int num = rand()%20 + 1;
+    return num;
+}
