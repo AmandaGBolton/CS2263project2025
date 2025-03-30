@@ -99,6 +99,10 @@ void purchaseItem(Player * player, Inventory * shop, char * itemName){
         free(current);
     }
     purchaseDialog(player, shop);
+    if(shop->item == NULL){
+        // If shop has no items left, free the inventory
+        freeInventory(shop);
+    }
 }
 
 Encounter * createQuestEncounter(){
@@ -108,7 +112,7 @@ Encounter * createQuestEncounter(){
 }
 
 Encounter * createExitEncounter() {
-    return createEncounter("You have found the exit. Would you like to leave?", NULL, "Thank you for playing!");
+    return createEncounter("You have found the exit. You can return to the village! Would you like to leave?", NULL, "Thank you for playing!");
 }
 
 Encounter * createDwarfNPC() {
@@ -139,6 +143,17 @@ Encounter * createWitch() {
     Item * ring = generateItem("agility ring", 1);
     Inventory * witchInventory = createInventoryNode(ring, NULL, NULL);
     return createEncounter("You have found a witch. She offers you a +1 ring of agility for 5 gold.", witchInventory, "She grins widely and wiggles her fingers at you.");
+}
+
+void startStory(Player * player){
+    printf("Welcome, %s\n", player->name);
+    printf("The village elder has call on you to retrieve a magical goblet that is hidden in the dungeon.\n");
+    printf("The goblet is said to have the power to heal the sick and wounded.\n");
+    printf("You must find the goblet and return it to the village before it is too late.\n");
+    printf("You have been given a sword and armor, one health potion, and 5 gold to start.\n");
+    printf("You have 20 HP, and healing potions will heal 5 HP.");
+    printf("But beware, the dungeon is full of traps, monsters, and other dangers.\n");
+    printf("Good luck!\n");
 }
 
 

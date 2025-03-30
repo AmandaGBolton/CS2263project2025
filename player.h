@@ -11,7 +11,7 @@ typedef struct Player {
 } Player;
 
 void freePlayer(Player *player);
-Player *createPlayer(int hp, int att, int def, int agl, int gold, char* name);
+Player *createPlayer(int hp, int att, int def, int agl, char* name);
 void *equipStartingPlayer(Player *player);
 void heal(Player *player, int hpRegained);
 void isPlayerDead(Player *player, int damage);

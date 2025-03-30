@@ -30,6 +30,18 @@ Player *createPlayer(int hp, int att, int def, int agl, char* name) {
     return player;
 }
 
+char * getPlayerName() {
+    char* playerName;
+    printf("What is your name? (Max 20 characters) ");
+    scanf(" %s", &playerName);
+    while (playerName[0] == '\0' || strlen(playerName) > 20) {
+        printf("\nThat isn't right. Please enter a valid name. ");
+        scanf(" %c", &playerName);
+    }
+    printf("\nWelcome to the game %c!\n", playerName);
+    return playerName;
+}
+
 // Add starting items. Armor, sword, 1 HP potion, 5 gold.
 // Still need to figure out gold and inventory
 // Also figure out inventory items in general so they have stats (type Item)
@@ -56,6 +68,7 @@ void isPlayerDead(Player *player, int damage){
     if (currentHP <= 0){
         printf("You have died!\n");
         freePlayer(player);
+        // Free dungeon^
     } else {
         player->hp = currentHP;
         printf("You were hit for %d damage. You have %d HP left.\n", damage, currentHP);
@@ -127,28 +140,28 @@ void adjustStats(Player *player) {
     free(temp);
 }
 
-int main() {
+// int main() {
 
-    // Ask player for name and check length
-    char* playerName;
-    printf("What is your name? (Max 20 characters) ");
-    scanf(" %c", &playerName);
-    if(playerName[0]=="\0") {
-        playerName = "Bob";
-        printf("No name? We'll call you Bob then.\n");
-    } else if (strlen(playerName)>20) {
-        printf("\nThat is too long! Please choose something shorter.");
-        scanf(" %c", &playerName);
-    }
-    if (strlen(playerName)>20) {
-        printf("\nThat is too long! We'll just call you Bob then.\n");
-        playerName = "Bob";
-    }
-    printf("Welcome to the game %c!\n", playerName);
+//     // Ask player for name and check length
+//     char* playerName;
+//     printf("What is your name? (Max 20 characters) ");
+//     scanf(" %c", &playerName);
+//     if(playerName[0]=="\0") {
+//         playerName = "Bob";
+//         printf("No name? We'll call you Bob then.\n");
+//     } else if (strlen(playerName)>20) {
+//         printf("\nThat is too long! Please choose something shorter.");
+//         scanf(" %c", &playerName);
+//     }
+//     if (strlen(playerName)>20) {
+//         printf("\nThat is too long! We'll just call you Bob then.\n");
+//         playerName = "Bob";
+//     }
+//     printf("Welcome to the game %c!\n", playerName);
     
-    struct Player * currentPlayer;
-    currentPlayer = createPlayer(20, 1, 1, 0, playerName);
+//     struct Player * currentPlayer;
+//     currentPlayer = createPlayer(20, 1, 1, 0, playerName);
     
-    return 0;
-}
+//     return 0;
+// }
 
