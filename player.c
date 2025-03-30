@@ -31,15 +31,16 @@ Player *createPlayer(int hp, int att, int def, int agl, char* name) {
 }
 
 char * getPlayerName() {
-    char* playerName;
+    char playerName[20];
     printf("What is your name? (Max 20 characters) ");
-    scanf(" %s", &playerName);
+    scanf(" %s", playerName);
     while (playerName[0] == '\0' || strlen(playerName) > 20) {
         printf("\nThat isn't right. Please enter a valid name. ");
         scanf(" %c", &playerName);
     }
+    char * name = playerName;
     printf("\nWelcome to the game %c!\n", playerName);
-    return playerName;
+    return name;
 }
 
 // Add starting items. Armor, sword, 1 HP potion, 5 gold.

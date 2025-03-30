@@ -82,33 +82,33 @@ Item * generateItem(char * itemType, int num){
 }
 
 char desiredItem(char * itemName) {
-     if(itemName == "potion") {
+     if(strcmp(itemName, "potion") == 0){
         return 'p';
-    } else if(itemName == "agility ring") {
+    } else if(strcmp(itemName,"agility ring") == 0){
         return 'r';
-    } else if(itemName == "agility amulet") {
+    } else if(strcmp(itemName, "agility amulet") == 0) {
         return 'g';
-    } else if(itemName == "strength amulet") {
+    } else if(strcmp(itemName, "strength amulet") == 0) {
         return 't';
-    } else if(itemName == "sword") {
+    } else if(strcmp(itemName, "sword") == 0) {
         return 's';
-    } else if(itemName == "bronze sword") {
+    } else if(strcmp(itemName, "bronze sword") == 0) {
         return 'b';
-    } else if(itemName == "iron sword") {
+    } else if(strcmp(itemName, "iron sword") == 0) {
         return 'i';
-    } else if(itemName == "mythic sword") {
+    } else if(strcmp(itemName, "mythic sword") == 0) {
         return 'm';
-    } else if(itemName == "armor") {
+    } else if(strcmp(itemName, "armor") == 0) {
         return 'A';
-    } else if(itemName == "bronze armor") {
+    } else if(strcmp(itemName, "bronze armor") == 0) {
         return 'B';
-    } else if(itemName == "iron armor") {
+    } else if(strcmp(itemName, "iron armor") == 0) {
         return 'I';
-    } else if(itemName == "mythic armor") {
+    } else if(strcmp(itemName ,"mythic armor") == 0) {
         return 'M';
-    } else if(itemName == "coin purse") {
+    } else if(strcmp(itemName, "coin purse") == 0) {
         return 'c';
-    } else if(itemName == "potion belt") {
+    } else if(strcmp(itemName, "potion belt") == 0) {
         return 'P';
     } else {
         printf("Invalid item name.\n");

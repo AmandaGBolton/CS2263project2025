@@ -72,7 +72,7 @@ void pickUpItem(Player *player, Item * item) {
 // remove item from inventory
 void dropItem(Inventory *inventory, Item *itemName, int num) {
     // When gold or potion, only subtract from total in item to a max low of 0
-    if(itemName == "gold" || itemName == "potion") {
+    if(strcmp(itemName,"gold") == 0 || strcmp(itemName, "potion") == 0) {
         Inventory * temp = inventory;
         while (temp != NULL) {
             if (temp->item == itemName) {
@@ -114,9 +114,9 @@ void displayInventory(Inventory *inventory) {
     printf("Inventory: ");
     Inventory * temp = inventory;
     while (temp != NULL) {
-        if(inventory->item->name == "gold") {
+        if(strcmp(inventory->item->name,"gold") == 0) {
             printf("%d gold ", temp->item->mod);
-        } else if(inventory->item->name == "potion") {
+        } else if(strcmp(inventory->item->name, "potion") == 0) {
             printf("%d potions ", temp->item->mod);
         } else {
         printf("%s ", temp->item->name);
@@ -129,7 +129,7 @@ void displayInventory(Inventory *inventory) {
 int isInInventory(Inventory * list, Item * item) {
     Inventory * temp = list;
     while (temp != NULL) {
-        if (temp->item->name == item->name) {
+        if (strcmp(temp->item->name, item->name) == 0) {
             return 1;
         }
         temp = temp->next;
@@ -140,7 +140,7 @@ int isInInventory(Inventory * list, Item * item) {
 Item * findIem(Inventory * inventory, char * itemName) {
     Inventory * temp = inventory;
     while (temp != NULL) {
-        if (temp->item->name == itemName) {
+        if (strcmp(temp->item->name, itemName) == 0) {
             return temp->item;
         }
         temp = temp->next;
