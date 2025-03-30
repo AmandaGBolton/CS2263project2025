@@ -6,8 +6,7 @@ typedef struct Player {
     int att;
     int def;
     int agl;
-    int gold;
-    struct Inventory ** inventory;
+    struct Inventory * inventory;
     char * name;
 } Player;
 

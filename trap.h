@@ -18,7 +18,7 @@ typedef struct Trap {
 
 } Trap;
 
-Trap * createTrap(char* prompt, char* failStory, char* successStory, int damage, char* damageType, int savingThrowReq);
+Trap * createTrap(char* prompt, char* failStory, char* successStory, int damage, char* damageType, int savingThrowReq, Item * reward);
 void freeTrap(Trap * trap);
 
 #endif

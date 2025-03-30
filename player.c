@@ -10,13 +10,12 @@
 // Function to free a player from memory (e.g., on death)
 void freePlayer(Player *player) {
     // Need to free inventory in whatever way is appropriate^
-    // free(player->inventory);
-    free(player->name);
+    freeInventory(player->inventory);
     free(player);
 }
 
 // Function to create a Player
-Player *createPlayer(int hp, int att, int def, int agl, int gold, char* name) {
+Player *createPlayer(int hp, int att, int def, int agl, char* name) {
     Player *player = (Player *)malloc(sizeof(Player));
     if (!player) {
         printf("Memory allocation failed!\n");
@@ -26,7 +25,6 @@ Player *createPlayer(int hp, int att, int def, int agl, int gold, char* name) {
     player->att = att;
     player->def = def;
     player->agl = agl;
-    player->gold = gold;
     player->name = name;
     equipStartingPlayer(player);
     return player;
@@ -37,13 +35,7 @@ Player *createPlayer(int hp, int att, int def, int agl, int gold, char* name) {
 // Also figure out inventory items in general so they have stats (type Item)
 // Ideally import Item, make copy of desired item to add to player inventory
 void *equipStartingPlayer(Player *player) {
-    Item * sword = createSword();
-    Item * armor = createArmor();
-    Item * potion = createPotion();
-    // Need to add these to player inventory in some way
-    pickUpItem(player.inventory, sword);
-    pickUpItem(player.inventory, armor);
-    pickUpItem(player.inventory, potion);
+    starterInventory(player);
     adjustStats(player);
 }
 
@@ -73,24 +65,66 @@ void isPlayerDead(Player *player, int damage){
 //This needs to look at current inventory and adjust stats
 // Check for stat modifying items for ATT, DEF, and AGL
 void adjustStats(Player *player) {
-    // base values
-    int att = 1;
-    int def = 1;
+    // base values for sword/armor
+    int att = 0;
+    int def = 0;
     int agl = 0;
-    
-    // Exact same item does not stack, but different items can
-    // ^ loop to create list of unique items in inventory that mod > 0
-    
-    // Only ONE sword and ONE armor allowed to count (highest)
-    // ^ loop to get only highest mod value of sword / armor, remove others
-    
-    // With final list add mod to appropriate stats, ignore potions
-    // ^If ATT, then =+ mod value on att, etc.
+    // For all other objects
+    int objAtt = 0;
+    int objDef = 0;
 
-    // Set final values
-    player->att = att;
-    player->def = def;
+    Inventory * tempList = NULL;
+    
+    // Loop should add only one sword and one armor to att and def, whatever is highest value
+    // Any other ATT and DEF that are not sword or armor can be added to att and def but only unique names
+    // All unique AGL items can be added to agl
+    Inventory * temp = player->inventory;
+    while (temp != NULL) {
+        if (strcmp(temp->item->stat, "ATT") == 0) {
+            // Check if substring contains "sword"
+            if (strstr(temp->item->name, "sword") != NULL) {
+                if (temp->item->mod > att) {
+                    att = temp->item->mod;
+                }
+            } else {
+                // Check if item is not already in list
+                if (!isInInventory(tempList, temp->item)) {
+                    // Add item to list
+                    addToInventory(tempList, temp->item);
+                    objAtt += temp->item->mod;
+                }
+            }
+        } else if (strcmp(temp->item->stat, "DEF") == 0) {
+            // Check if substring contains "armor"
+            if (strstr(temp->item->name, "armor") != NULL) {
+                if (temp->item->mod > def) {
+                    def = temp->item->mod;
+                }
+            }
+            else {
+                // Check if item is not already in list
+                if (!isInInventory(tempList, temp->item)) {
+                    // Add item to list
+                    addToInventory(tempList, temp->item);
+                    objDef += temp->item->mod;
+                }
+            }
+        } else if (strcmp(temp->item->stat, "AGL") == 0) {
+            if (!isInInventory(tempList, temp->item)) {
+                // Add item to list
+                addToInventory(tempList, temp->item);
+                agl += temp->item->mod;
+            }                
+        }
+ 
+        temp = temp->next;
+    }  
+
+    player->att = att + objAtt;
+    player->def = def + objDef;
     player->agl = agl;
+    free(tempList);
+    free(temp);
 }
 
 int main() {
@@ -113,7 +147,7 @@ int main() {
     printf("Welcome to the game %c!\n", playerName);
     
     struct Player * currentPlayer;
-    currentPlayer = createPlayer(20, 1, 1, 0, 5, playerName);
+    currentPlayer = createPlayer(20, 1, 1, 0, playerName);
     
     return 0;
 }

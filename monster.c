@@ -3,7 +3,7 @@
 #include <string.h>
 #include "inventory.h"
 #include "item.h"
-#include "monsters.h"
+#include "monster.h"
 
 // Saving monsters should be tied to rooms
 
@@ -12,6 +12,31 @@ void freeMonster(Monster *monster) {
     // free(monster->rewards);
     free(monster->inventory);
     free(monster);
+}
+
+Monster * pickRandomMonster(){
+    int r = getRandomNumber();
+    if (r < 10){
+        return createSnake();
+    } else if (r < 20){
+        return createSpider();
+    } else if (r < 30){
+        return createTroll();
+    } else if (r < 40){
+        return createGnome();
+    } else if (r < 50){
+        return createGhost();
+    } else if (r < 60){
+        return createArmor();
+    } else if (r < 70){
+        return createSkeleton();
+    } else if (r < 80){
+        return createMimic();
+    } else if (r < 90){
+        return createMist();
+    } else {
+        return createDog();
+    }
 }
 
 // Function to create a Monster, assumes only one item in inventory

@@ -1,5 +1,5 @@
-#ifndef MONSTERS_H
-#define MONSTERS_H
+#ifndef MONSTER_H
+#define MONSTER_H
 #include "inventory.h"
 
 typedef struct {

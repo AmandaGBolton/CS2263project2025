@@ -12,5 +12,12 @@ typedef struct Inventory {
 } Inventory;
 
 // Method signatures here
+Inventory * createInventoryNode(Item * item, Inventory * prev, Inventory * next);
+void freeInventory(Inventory *inventory);
+void starterInventory(Player *player);
+void addToInventory(Inventory *inventory, Item *item);
+void pickUpItem(Player *player, Item *item);
+void dropItem(Inventory *inventory, Item *itemName, int num);
+
 
 #endif

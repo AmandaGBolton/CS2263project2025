@@ -4,7 +4,6 @@
 #include "player.h"
 #include "item.h"  
 #include "inventory.h"
-#include "monsters.h"
 #include "trap.h"
 #include "encounter.h"
 
@@ -25,11 +24,29 @@ Trap * createTrap(char* prompt, char* failStory, char* successStory, int damage,
 }
 
 void freeTrap(Trap * trap){
-    free(trap->prompt);
-    free(trap->failStory);
-    free(trap->successStory);
     free(trap->reward);
     free(trap);
+}
+
+Trap * createRandomTrap(){
+    int r = getRandomNumber();
+    if (r < 15){
+        return createSpikeTrap();
+    } else if (r < 25){
+        return createRockTrap();
+    } else if (r < 35){
+        return createHarpyTrap();
+    } else if (r < 45){
+        return createGravityTrap();
+    } else if (r < 55){
+        return rotatingRoomTrap();
+    } else if (r < 65){
+        return skullRoom();
+    } else if (r < 75){ 
+        return treasureRoom();
+    } else {
+        return emptyRoom();
+    }
 }
 
 // This runs the trap scenario and handles the die roll and outcome
@@ -89,6 +106,7 @@ Trap * rotatingRoomTrap() {
     Trap * rotatingRoom = createTrap("You enter the room and see a large stone door close behind you. You hear a loud grinding noise as the room begins to rotate.", "You stumble as the room rotates, but manage to make it out safely.", "You manage to keep your balance as the room rotates, and even spot something glittering near the doorway.", 0, "AGILITY", 10, reward);
     return rotatingRoom;
 }
+
 // These are the not-traps but it is easier to just lump this together.
 Trap * emptyRoom() {
     Item * reward = createCoinPurse(1);

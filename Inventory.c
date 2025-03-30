@@ -84,6 +84,10 @@ void dropItem(Inventory *inventory, Item *itemName, int num) {
             }
             temp = temp->next;
         }
+    } else if (itemName = "Magical Goblet (Quest Item)") {
+        // Not allowed to remove this from inventory
+        printf("You cannot remove this item from your inventory!\n");
+        return;
     }
 
     // Any other items, remove from inventory
@@ -120,4 +124,26 @@ void displayInventory(Inventory *inventory) {
     }
     printf("\n");   
     }
+}
+
+int isInInventory(Inventory * list, Item * item) {
+    Inventory * temp = list;
+    while (temp != NULL) {
+        if (temp->item->name == item->name) {
+            return 1;
+        }
+        temp = temp->next;
+    }
+    return 0;
+}
+
+Item * findIem(Inventory * inventory, char * itemName) {
+    Inventory * temp = inventory;
+    while (temp != NULL) {
+        if (temp->item->name == itemName) {
+            return temp->item;
+        }
+        temp = temp->next;
+    }
+    return NULL;
 }
