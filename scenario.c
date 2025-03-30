@@ -72,14 +72,19 @@ Scenario * createExitRoom(){
 }
 
 void startStory(Player * player){
-    printf("Welcome, %s\n", player->name);
+    printf("***************@***************\n");
+    printf("Welcome, %s\n!", player->name);
     printf("The village elder has call on you to retrieve a magical goblet that is hidden in the dungeon.\n");
     printf("The goblet is said to have the power to heal the sick and wounded.\n");
     printf("You must find the goblet and return it to the village before it is too late.\n");
+    printf("-------------------------------\n");
+    printf("But beware, the dungeon is full of traps, monsters, and other dangers.\n");
+    printf("And you realize the way out is NOT the way in as they drop you into a hole.");
+    printf("-------------------------------\n");
     printf("You have been given a sword and armor, one health potion, and 5 gold to start.\n");
     printf("You have 20 HP, and healing potions will heal 5 HP.");
-    printf("But beware, the dungeon is full of traps, monsters, and other dangers.\n");
     printf("Good luck!\n");
+    printf("***************@***************\n");
 }
 
 // Random number between 1 and 100

@@ -20,14 +20,25 @@ Item * createItem(char * stat, int mod, char* name) {
         printf("Memory allocation for item creation failed!\n");
         exit(1);
     }
-    item->stat = stat;
-    item->mod = mod;
-    item->name = strdup(name); 
-    if (!item->name) {
-        printf("Memory allocation for item name failed!\n");
+    
+    item->stat = malloc(strlen(stat) + 1); // +1 for null terminator
+    if (!item->stat) {
+        printf("Memory allocation for item stat failed!\n");
         free(item); // Free the item structure to avoid memory leaks
         exit(1);
     }
+    strcpy(item->stat, stat);
+    
+    item->name = malloc(strlen(name) + 1); // +1 for null terminator
+    if (!item->name) {
+        printf("Memory allocation for item name failed!\n");
+        free(item->stat); // Free the stat string
+        free(item);       // Free the item structure
+        exit(1);
+    }
+    strcpy(item->name, name);
+
+    item->mod = mod;
     return item;
 }
 
@@ -41,32 +52,46 @@ Item * generateItem(char * itemType, int num){
     switch(desiredItem) {
         case 'p':
             item = createItem("HP", 1, "healing potion");
+            break;
         case 'r':
             item = createItem("AGL", 1, "agility ring");
+            break;
         case 'g':
             item = createItem("AGL", 2, "agility amulet");
+            break;
         case 't':
             item = createItem("ATT", 2, "strength amulet");
+            break;
         case 's':
             item = createItem("ATT", 1, "sword");
+            break;
         case 'b':
             item = createItem("ATT", 2, "bronze sword");
+            break;
         case 'i':
             item = createItem("ATT", 3, "iron sword");
+            break;
         case 'm':
             item = createItem("ATT", 4, "mythic sword");
+            break;
         case 'a':
             item = createItem("DEF", 1, "armor");
+            break;
         case 'z':
             item = createItem("DEF", 2, "bronze armor");
+            break;
         case 'n':
             item = createItem("DEF", 3, "iron armor");
+            break;
         case 'y':
             item = createItem("DEF", 4, "mythic armor");
+            break;
         case 'c':
             item = createItem("GOLD", num, "coin purse");
+            break;
         case 'l':
             item = createItem("POTION", num, "potion belt");
+            break;
         default:
             printf("Invalid item type.\n");
             free(item);
@@ -104,8 +129,10 @@ char getItemType(char * itemName) {
         return 'c';
     } else if(strcmp(itemName, "potion belt") == 0) {
         return 'l';
+    } else if(strcmp(itemName, "gold") == 0) {
+        return 'c';
     } else {
-        printf("Invalid item name.\n");
+        printf("Invalid item name %s.\n", itemName);
         return '\0';
     }
 }

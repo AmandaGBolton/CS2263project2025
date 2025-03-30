@@ -22,11 +22,20 @@ Player *createPlayer(int hp, int att, int def, int agl, char* name) {
         printf("Memory allocation failed!\n");
         exit(1);
     }
+
+     player->name = malloc(strlen(name) + 1); 
+    if (!player->name) {
+        printf("Memory allocation for player name failed!\n");
+        free(player); // Free the player structure to avoid memory leaks
+        exit(1);
+    }
+    strcpy(player->name, name);
+
     player->hp = hp;
     player->att = att;
     player->def = def;
     player->agl = agl;
-    player->name = name;
+
     equipStartingPlayer(player);
     return player;
 }
@@ -144,8 +153,8 @@ void adjustStats(Player *player) {
         temp = temp->next;
     }  
 
-    player->att = att + objAtt;
-    player->def = def + objDef;
+    player->att = 1 + att + objAtt;
+    player->def = 1 + def + objDef;
     player->agl = agl;
     free(tempList);
     free(temp);

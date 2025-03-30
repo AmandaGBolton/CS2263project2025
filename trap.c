@@ -114,6 +114,7 @@ Trap * createHarpyTrap() {
 
 Trap * createGravityTrap() {
     Trap * gravityTrap = createTrap("You step into the room and suddenly you feel extremely heavy and collapse to the floor.", "You slowly crawl across the floor, scraping your body on sharp rocks. Take 2 damage.", "You manage to stand, slowly making your way safely across the room.", 2, "STRENGTH", 10, NULL);
+    return gravityTrap;
 }
 
 Trap * rotatingRoomTrap() {

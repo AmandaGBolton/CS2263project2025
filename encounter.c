@@ -5,6 +5,7 @@
 #include "item.h"
 #include "inventory.h"
 #include "encounter.h"
+#include "scenario.h"
 
 // Create an NPC encounter 
 
@@ -50,12 +51,12 @@ void purchaseDialog(Player * player, Inventory * shop){
     printf("What would you like to buy anything? Each item costs 5 gold. Y or N: ");
     // get input
     char input;
-    char name[20];
+    char name[50];
     scanf(" %c", &input);
-    if (input == "Y"){
+    if (input == 'Y' || input == 'y'){
         // purchase item
         printf("\nWhat would you like to purchase? Type its name exactly. ");
-        scanf(" %s", &name);
+        scanf(" %49s", name);
         purchaseItem(player, shop, name);
     } else {
         printf("\nOkay, thank you for stopping by!\n");
@@ -85,7 +86,7 @@ void purchaseItem(Player * player, Inventory * shop, char * itemName){
     } else {
         dropItem(player->inventory, "gold", 5);
         // Add item to player inventory
-        pickUpItem(player->inventory, current->item);
+        pickUpItem(player, current->item);
         // Remove item from shop inventory
         if (current->prev != NULL){
             current->prev->next = current->next;
