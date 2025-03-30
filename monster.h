@@ -6,7 +6,7 @@ typedef struct {
     int hp;
     int att;
     int def;
-    struct Inventory ** inventory;
+    struct Inventory * inventory;
     char* name;
 } Monster;
 

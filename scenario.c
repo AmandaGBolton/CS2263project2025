@@ -28,6 +28,9 @@ void freeScenario(Scenario * scenario){
 }
 
 // TRIGGER THIS ON ROOM CREATION
+// FROM ROOM, if it is time for quest room, return quest room
+    //If quest room is already done, return exit room
+    // Otherwise, cal this method to get a random room
 Scenario * pickScenario(){
     // Randomly pick a scenario
     int r = getRandomNumber();
@@ -52,7 +55,7 @@ void triggerScenario(Scenario * scenario, Player * player){
         describeShop(scenario->encounter->inventory);
         purchaseDialog(player, scenario->encounter->inventory);
     } else if (scenario->monster != NULL){
-        fightMonster(player, scenario->monster);
+        fightOrFlight(player, scenario->monster);
     } else {
         printf("You have found an empty room.\n");
     }

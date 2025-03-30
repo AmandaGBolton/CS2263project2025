@@ -13,3 +13,9 @@ int getRandomNumber20() {
     int num = rand()%20 + 1;
     return num;
 }
+
+int rollDice(int sides) {
+    srand(time(NULL));
+    int num = rand()%sides + 1;
+    return num;
+}
