@@ -37,20 +37,6 @@ void freeEncounter(Encounter * encounter){
     free(encounter);
 }
 
-// Need to make them still, will be similar to traps and monsters. Each is a person who offers something (or nothing)
-Encounter * pickRandomEncounter() {
-    int r = getRandomNumber();
-    if (r < 33){
-        return createDwarfNPC();
-    } else if (r < 50){
-        return createCrazyMan();
-    } else if (r < 70){
-        return createWitch();
-    } else {
-        return createGoodsMerchant();
-    }
-}
-
 void describeShop(Inventory * inventory){
     Inventory * current = inventory;
     printf("Welcome to the shop! Here is what we have for sale:\n");
@@ -158,5 +144,16 @@ Encounter * createWitch() {
     return createEncounter("You have found a witch. She offers you a +1 ring of agility for 5 gold.", witchInventory, "She grins widely and wiggles her fingers at you.");
 }
 
-
-
+// Need to make them still, will be similar to traps and monsters. Each is a person who offers something (or nothing)
+Encounter * pickRandomEncounter() {
+    int r = getRandomNumber();
+    if (r < 33){
+        return createDwarfNPC();
+    } else if (r < 50){
+        return createCrazyMan();
+    } else if (r < 70){
+        return createWitch();
+    } else {
+        return createGoodsMerchant();
+    }
+}

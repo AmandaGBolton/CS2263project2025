@@ -20,6 +20,6 @@ void addToInventory(Inventory *inventory, Item *item);
 void pickUpItem(Player *player, Item *item);
 void dropItem(Inventory *inventory, char *itemName, int num);
 Item * findItem(Inventory *inventory, char *itemName);
-void printInventory(Inventory *inventory);
+void displayInventory(Inventory *inventory);
 int isInInventory(Inventory * list, Item * item);
 #endif

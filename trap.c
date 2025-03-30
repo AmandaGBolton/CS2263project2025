@@ -6,6 +6,7 @@
 #include "inventory.h"
 #include "trap.h"
 #include "encounter.h"
+#include "scenario.h"
 
 Trap * createTrap(char* prompt, char* failStory, char* successStory, int damage, char* damageType, int savingThrowReq, Item * reward){
     Trap * trap = (Trap *)malloc(sizeof(Trap));
@@ -64,27 +65,6 @@ void freeTrap(Trap * trap){
     free(trap);
 }
 
-Trap * createRandomTrap(){
-    int r = getRandomNumber();
-    if (r < 15){
-        return createSpikeTrap();
-    } else if (r < 25){
-        return createRockTrap();
-    } else if (r < 35){
-        return createHarpyTrap();
-    } else if (r < 45){
-        return createGravityTrap();
-    } else if (r < 55){
-        return rotatingRoomTrap();
-    } else if (r < 65){
-        return skullRoom();
-    } else if (r < 75){ 
-        return treasureRoom();
-    } else {
-        return emptyRoom();
-    }
-}
-
 // This runs the trap scenario and handles the die roll and outcome
 void attemptTrap(Player * player, Trap * trap){
     printf("%s\n", trap->prompt);
@@ -106,14 +86,13 @@ void attemptTrap(Player * player, Trap * trap){
     if (savingThrow >= trap->savingThrowReq){
         printf("%s\n", trap->successStory);
         if (trap->reward != NULL){
-            pickUpItem(player->inventory, trap->reward);
+            pickUpItem(player, trap->reward);
             adjustStats(player);
         }
         
     } else {
         printf("%s\n", trap->failStory);
-        player->hp -= trap->damage;
-        checkIfPlayerDead(player, trap);
+        isPlayerDead(player, trap->damage);
     }
 }
 
@@ -145,7 +124,7 @@ Trap * rotatingRoomTrap() {
 
 // These are the not-traps but it is easier to just lump this together.
 Trap * emptyRoom() {
-    Item * reward = createCoinPurse(1);
+    Item * reward = createItem("GOLD", 5, "coin purse");
     Trap * empty = createTrap("You enter the room and see nothing but dust and cobwebs.", "You sneeze loudly.", "You look around the room and manage to find one gold.", 0, "NONE", 5, reward);
     return empty;
 }
@@ -157,7 +136,28 @@ Trap * treasureRoom() {
 }
 
 Trap * skullRoom() {
-    Item * reward = createStrengthAmulet();
+    Item * reward = createItem("ATT", 2, "strength amulet");
     Trap * skull = createTrap("You enter the room and see a large skull in the center of the room. You look inside and find an unusual amulet.", NULL, NULL, 0, "NONE", 1, reward);
     return skull;
+}
+
+Trap * createRandomTrap(){
+    int r = getRandomNumber();
+    if (r < 15){
+        return createSpikeTrap();
+    } else if (r < 25){
+        return createRockTrap();
+    } else if (r < 35){
+        return createHarpyTrap();
+    } else if (r < 45){
+        return createGravityTrap();
+    } else if (r < 55){
+        return rotatingRoomTrap();
+    } else if (r < 65){
+        return skullRoom();
+    } else if (r < 75){ 
+        return treasureRoom();
+    } else {
+        return emptyRoom();
+    }
 }

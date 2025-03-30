@@ -22,4 +22,12 @@ Trap * createTrap(char* prompt, char* failStory, char* successStory, int damage,
 void freeTrap(Trap * trap);
 Trap * createRandomTrap();
 void attemptTrap(Player * player, Trap * trap);
+Trap * createSpikeTrap();
+Trap * createRockTrap();
+Trap * createHarpyTrap();
+Trap * createGravityTrap();
+Trap * rotatingRoomTrap();
+Trap * emptyRoom();
+Trap * treasureRoom();
+Trap * skullRoom();
 #endif

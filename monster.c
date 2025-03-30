@@ -5,6 +5,7 @@
 #include "item.h"
 #include "monster.h"
 #include "player.h"
+#include "scenario.h"
 
 // Saving monsters should be tied to rooms
 
@@ -12,6 +13,7 @@
 void freeMonster(Monster *monster) {
     // free(monster->rewards);
     free(monster->inventory);
+    free(monster->name);
     free(monster);
 }
 
@@ -57,7 +59,14 @@ Monster *createMonster(int hp, int att, int def, Item * reward, char* name) {
         exit(1);
     }
     monster->inventory = inventory;
-    monster->name = name;
+    monster->name = strdup(name);
+    if (!monster->name) {
+        printf("Memory allocation for name failed!\n");
+        free(monster->inventory);
+        free(monster);
+        exit(1);
+    }
+    
     return monster;
 }
 
@@ -154,12 +163,12 @@ void fightOrFlight(Monster * monster, Player * player) {
     // Player prompt with monster description
     printf("There is a monster in the room!\n");
     printf("It is a %s. What will you do? Fight (F) or run (R)?\n", monster->name);
-    char choice[1];
-    scanf("%c", choice);
+    char choice;
+    scanf("%c", &choice);
     if(choice=='R') {
         // Do navigation options^
     } else if (choice=='F') {
-        fightMonster(player, monster);
+        fightMonster(monster, player);
     } else {
         printf("Invalid choice. Please enter F or R.\n");
         fightOrFlight(monster, player);
@@ -167,7 +176,7 @@ void fightOrFlight(Monster * monster, Player * player) {
 }
 
 // Fight method
-void fightMonster(Player * player, Monster * monster) {
+void fightMonster(Monster * monster, Player * player) {
     // Roll to attack monster
     int playerRoll = rollDice(20);
     int playerAtt = player->att;
@@ -184,7 +193,7 @@ void fightMonster(Player * player, Monster * monster) {
         if (monster->hp <= 0) {
             printf("You have defeated the monster!\n");
             // Add monster reward to player inventory
-            pickUpItem(player->inventory, monster->inventory->item);
+            pickUpItem(player, monster->inventory->item);
             // Adjust player stats
             adjustStats(player);
         } else {

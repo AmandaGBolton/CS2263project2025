@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "item.h"
-#include "encounter.h"
+#include "scenario.h"
 
 // Saving player should record current stats (incld HP) and inventory^
 

@@ -20,4 +20,7 @@ void triggerScenario(Scenario * scenario, Player * player);
 Scenario * createQuestRoom();
 Scenario * createExitRoom();
 void startStory(Player * player);
+int getRandomNumber();
+int getRandomNumber20();
+int rollDice(int sides);
 #endif

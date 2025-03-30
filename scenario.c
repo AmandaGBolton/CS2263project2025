@@ -1,17 +1,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include "player.h"
 #include "item.h"
 #include "inventory.h"
 #include "encounter.h"
 #include "trap.h"
+#include "monster.h"
 #include "scenario.h"
 
 // Scenario attaches to a room, Player also attaches to a room separately
 // It holds whatever NPC encounter, monster, or trap is present
 // Normally only ONE of those will be present, the others will be NULL
-Encounter * createScenario(Trap * trap, Encounter * encounter, Monster * monster){
+Scenario * createScenario(Trap * trap, Encounter * encounter, Monster * monster){
     Scenario * scenario = (Scenario *)malloc(sizeof(Scenario));
     if (!scenario) {
         printf("Memory allocation failed!\n");
@@ -55,7 +57,7 @@ void triggerScenario(Scenario * scenario, Player * player){
         describeShop(scenario->encounter->inventory);
         purchaseDialog(player, scenario->encounter->inventory);
     } else if (scenario->monster != NULL){
-        fightOrFlight(player, scenario->monster);
+        fightOrFlight(scenario->monster, player);
     } else {
         printf("You have found an empty room.\n");
     }
@@ -82,21 +84,21 @@ void startStory(Player * player){
 
 // Random number between 1 and 100
 int getRandomNumber() {
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     int num = rand()%100 + 1;
     return num;
 }
 
 // Random number between 1 and 20
 int getRandomNumber20() {
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     int num = rand()%20 + 1;
     return num;
 }
 
 // Random number between 1 and sides
 int rollDice(int sides) {
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     int num = rand()%sides + 1;
     return num;
 }

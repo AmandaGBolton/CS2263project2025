@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
     printf("Player's attack is %d\n", currentPlayer->att);
     printf("Player's defense is %d\n", currentPlayer->def);
     printf("Player's agility is %d\n", currentPlayer->agl);
-    printInventory(currentPlayer->inventory);
+    displayInventory(currentPlayer->inventory);
 
     // Start story
 }

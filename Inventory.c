@@ -138,7 +138,7 @@ int isInInventory(Inventory * list, Item * item) {
     return 1;
 }
 
-Item * findIem(Inventory * inventory, char * itemName) {
+Item * findItem(Inventory * inventory, char * itemName) {
     Inventory * temp = inventory;
     while (temp != NULL) {
         if (strcmp(temp->item->name, itemName) == 0) {
