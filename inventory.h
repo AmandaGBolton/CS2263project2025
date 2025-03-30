@@ -18,6 +18,6 @@ void starterInventory(Player *player);
 void addToInventory(Inventory *inventory, Item *item);
 void pickUpItem(Player *player, Item *item);
 void dropItem(Inventory *inventory, Item *itemName, int num);
-
-
+Item * findItem(Inventory *inventory, char *itemName);
+void printInventory(Inventory *inventory);
 #endif

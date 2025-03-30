@@ -20,5 +20,6 @@ typedef struct Trap {
 
 Trap * createTrap(char* prompt, char* failStory, char* successStory, int damage, char* damageType, int savingThrowReq, Item * reward);
 void freeTrap(Trap * trap);
-
+Trap * createRandomTrap();
+void attemptTrap(Player * player, Trap * trap);
 #endif

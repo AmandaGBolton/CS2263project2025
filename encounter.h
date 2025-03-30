@@ -17,4 +17,5 @@ Encounter * createEncounter(char* prompt, Inventory * inventory, char * thanksMs
 void describeShop(Inventory * inventory);
 void purchaseDialog(Player * player, Inventory * shop);
 void purchaseItem(Player * player, Inventory * shop, char * itemName);  
+Encounter * pickRandomEncounter();
 #endif
