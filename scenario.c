@@ -61,3 +61,7 @@ void triggerScenario(Scenario * scenario, Player * player){
 Scenario * createQuestRoom(){
     return createScenario(NULL, createQuestEncounter(), NULL);
 }
+
+Scenario * createExitRoom(){
+    return createScenario(NULL, createExitEncounter(), NULL);
+}

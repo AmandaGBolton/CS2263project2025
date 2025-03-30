@@ -137,7 +137,7 @@ Item * getLowItem(){
             item = generateItem("bronze armor", 1);
             break;
         default:
-            item = generateItem("coin purse", 5);
+            item = generateItem("coin purse", 10);
             break;
     }
     return item;
@@ -161,7 +161,7 @@ Item * getMidItem(){
             item = generateItem("iron armor", 1);
             break;
         default:
-            item = generateItem("coin purse", 10);
+            item = generateItem("coin purse", 15);
             break;
     }
     return item;

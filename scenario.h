@@ -15,5 +15,9 @@ typedef struct Scenario {
 
 Scenario * createScenario(Trap * trap, Encounter * encounter, Monster * monster);
 void freeScenario(Scenario * scenario);
+Scenario * pickScenario();
+void triggerScenario(Scenario * scenario, Player * player);
+Scenario * createQuestRoom();
+Scenario * createExitRoom();
 
 #endif

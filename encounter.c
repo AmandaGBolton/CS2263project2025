@@ -28,11 +28,13 @@ void freeEncounter(Encounter * encounter){
 Encounter * pickRandomEncounter() {
     int r = getRandomNumber();
     if (r < 33){
-        return createEncounter("You have encountered a shopkeeper. Would you like to buy something?", createInventoryNode(generateItem("potion", 1), NULL, NULL), "Thank you for stopping by!");
-    } else if (r < 66){
-        return createEncounter("You have encountered a shopkeeper. Would you like to buy something?", createInventoryNode(generateItem("potion", 1), NULL, NULL), "Thank you for stopping by!");
+        return createDwarfNPC();
+    } else if (r < 50){
+        return createCrazyMan();
+    } else if (r < 70){
+        return createWitch();
     } else {
-        return createEncounter("You have encountered a shopkeeper. Would you like to buy something?", createInventoryNode(generateItem("potion", 1), NULL, NULL), "Thank you for stopping by!");
+        return createGoodsMerchant();
     }
 }
 
@@ -104,3 +106,40 @@ Encounter * createQuestEncounter(){
     Inventory * questInventory = createInventoryNode(questItem, NULL, NULL);
     return createEncounter("You have found it! The magical goblet sits on a shelf. You go and pick it up.", questInventory, "The goblet feels warm in your hands. You hear a roar behind you. Time to esacpe!");
 }
+
+Encounter * createExitEncounter() {
+    return createEncounter("You have found the exit. Would you like to leave?", NULL, "Thank you for playing!");
+}
+
+Encounter * createDwarfNPC() {
+    //Lost dwarf. Sells +2 sword or +2 armour for 5gold each
+    Item * sword = generateItem("bronze sword", 1);
+    Item * armor = generateItem("bronze armor", 1);
+    Inventory * dwarfInventory = createInventoryNode(sword, NULL, NULL);
+    addToInventory(dwarfInventory, armor);
+    return createEncounter("You have found a lost dwarf. He offers you a +2 sword or +2 armor for 5 gold each.", dwarfInventory, "The dwarf nods and grunts his thanks.");
+}
+
+Encounter * createGoodsMerchant() {
+    // Goods merchant. Sells HP potions (5 gold each) and agility amulet +1 (5 gold) 
+    Item * potion = generateItem("potion belt", 5);
+    Item * amulet = generateItem("strength amulet", 1);
+    Inventory * goodsInventory = createInventoryNode(potion, NULL, NULL);
+    addToInventory(goodsInventory, amulet);
+    return createEncounter("You have found a goods merchant. He offers you potions for 5 gold each and a strength amulet for 5 gold.", goodsInventory, "Thank you for your business!");
+}
+
+Encounter * createCrazyMan() {
+    // Crazy old man. Random gibberish but warns of certain strong monsters. Armor and Trolls. But they also give better loot.
+    return createEncounter("You encounter an old man. He's talking to himself. Over and over, he says 'Trolls! No! Armor! Hide!'", NULL, "As you leave, he mutters 'but they have the good stuff if you beat them...'");
+}
+
+Encounter * createWitch() {
+    // Witch. Give her any gold, gives you +1 ring of agility. 
+    Item * ring = generateItem("agility ring", 1);
+    Inventory * witchInventory = createInventoryNode(ring, NULL, NULL);
+    return createEncounter("You have found a witch. She offers you a +1 ring of agility for 5 gold.", witchInventory, "She grins widely and wiggles her fingers at you.");
+}
+
+
+
