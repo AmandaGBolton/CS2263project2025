@@ -14,13 +14,26 @@ Encounter * createEncounter(char* prompt, Inventory * shop, char * thanksMsg){
         printf("Memory allocation failed!\n");
         exit(1);
     }
-    encounter->prompt = prompt;
-    encounter->thanksMsg = thanksMsg;
+    encounter->prompt = strdup(prompt);
+    if (!encounter->prompt) {
+        printf("Memory allocation for prompt failed!\n");
+        free(encounter);
+        exit(1);
+    }
+        encounter->thanksMsg = strdup(thanksMsg);
+    if (!encounter->thanksMsg) {
+        printf("Memory allocation for thankMsg failed!\n");
+        free(encounter->prompt);
+        free(encounter);
+        exit(1);
+    }
     encounter->inventory = shop;
     return encounter;    
 }
 
 void freeEncounter(Encounter * encounter){
+    free(encounter->prompt);
+    free(encounter->thanksMsg);
     free(encounter);
 }
 
@@ -143,17 +156,6 @@ Encounter * createWitch() {
     Item * ring = generateItem("agility ring", 1);
     Inventory * witchInventory = createInventoryNode(ring, NULL, NULL);
     return createEncounter("You have found a witch. She offers you a +1 ring of agility for 5 gold.", witchInventory, "She grins widely and wiggles her fingers at you.");
-}
-
-void startStory(Player * player){
-    printf("Welcome, %s\n", player->name);
-    printf("The village elder has call on you to retrieve a magical goblet that is hidden in the dungeon.\n");
-    printf("The goblet is said to have the power to heal the sick and wounded.\n");
-    printf("You must find the goblet and return it to the village before it is too late.\n");
-    printf("You have been given a sword and armor, one health potion, and 5 gold to start.\n");
-    printf("You have 20 HP, and healing potions will heal 5 HP.");
-    printf("But beware, the dungeon is full of traps, monsters, and other dangers.\n");
-    printf("Good luck!\n");
 }
 
 

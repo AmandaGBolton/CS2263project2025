@@ -4,11 +4,11 @@
 #include "player.h"
 #include "item.h"
 #include "inventory.h"
-#include "encounter.h"
-#include "trap.h"
-#include "scenario.h"
-#include "monster.h"
-#include "dungeon.h"
+// #include "encounter.h"
+// #include "trap.h"
+// #include "scenario.h"
+// #include "monster.h"
+// #include "dungeon.h"
 
 //Initalize the main function
 int main(int argc, char **argv) {
@@ -27,5 +27,4 @@ int main(int argc, char **argv) {
     printInventory(currentPlayer->inventory);
 
     // Start story
-    startStory();
 }

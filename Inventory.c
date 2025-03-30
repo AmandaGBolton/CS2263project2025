@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "item.h"
 #include "inventory.h"
@@ -70,12 +71,12 @@ void pickUpItem(Player *player, Item * item) {
 }
 
 // remove item from inventory
-void dropItem(Inventory *inventory, Item *itemName, int num) {
+void dropItem(Inventory *inventory, char *itemName, int num) {
     // When gold or potion, only subtract from total in item to a max low of 0
     if(strcmp(itemName,"gold") == 0 || strcmp(itemName, "potion") == 0) {
         Inventory * temp = inventory;
         while (temp != NULL) {
-            if (temp->item == itemName) {
+            if (strcmp(temp->item->name, itemName) == 0) {
                 temp->item->mod -= num;
                 if (temp->item->mod < 0) {
                     temp->item->mod = 0;
@@ -84,7 +85,7 @@ void dropItem(Inventory *inventory, Item *itemName, int num) {
             }
             temp = temp->next;
         }
-    } else if (itemName = "Magical Goblet (Quest Item)") {
+    } else if (strcmp(itemName, "Magical Goblet (Quest Item)") == 0) {
         // Not allowed to remove this from inventory
         printf("You cannot remove this item from your inventory!\n");
         return;
@@ -93,7 +94,7 @@ void dropItem(Inventory *inventory, Item *itemName, int num) {
     // Any other items, remove from inventory
     Inventory * temp = inventory;
     while (temp != NULL) {
-        if (temp->item == itemName) {
+        if (strcmp(temp->item->name, itemName) == 0) {
             if (temp->prev != NULL) {
                 temp->prev->next = temp->next;
             }
@@ -130,11 +131,11 @@ int isInInventory(Inventory * list, Item * item) {
     Inventory * temp = list;
     while (temp != NULL) {
         if (strcmp(temp->item->name, item->name) == 0) {
-            return 1;
+            return 0;
         }
         temp = temp->next;
     }
-    return 0;
+    return 1;
 }
 
 Item * findIem(Inventory * inventory, char * itemName) {

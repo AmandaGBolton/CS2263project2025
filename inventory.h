@@ -1,6 +1,7 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
 #include "item.h"
+#include "player.h"
 
 typedef struct Inventory {
     // This will need to be a linked list
@@ -17,7 +18,8 @@ void freeInventory(Inventory *inventory);
 void starterInventory(Player *player);
 void addToInventory(Inventory *inventory, Item *item);
 void pickUpItem(Player *player, Item *item);
-void dropItem(Inventory *inventory, Item *itemName, int num);
+void dropItem(Inventory *inventory, char *itemName, int num);
 Item * findItem(Inventory *inventory, char *itemName);
 void printInventory(Inventory *inventory);
+int isInInventory(Inventory * list, Item * item);
 #endif

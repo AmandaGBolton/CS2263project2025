@@ -68,3 +68,35 @@ Scenario * createQuestRoom(){
 Scenario * createExitRoom(){
     return createScenario(NULL, createExitEncounter(), NULL);
 }
+
+void startStory(Player * player){
+    printf("Welcome, %s\n", player->name);
+    printf("The village elder has call on you to retrieve a magical goblet that is hidden in the dungeon.\n");
+    printf("The goblet is said to have the power to heal the sick and wounded.\n");
+    printf("You must find the goblet and return it to the village before it is too late.\n");
+    printf("You have been given a sword and armor, one health potion, and 5 gold to start.\n");
+    printf("You have 20 HP, and healing potions will heal 5 HP.");
+    printf("But beware, the dungeon is full of traps, monsters, and other dangers.\n");
+    printf("Good luck!\n");
+}
+
+// Random number between 1 and 100
+int getRandomNumber() {
+    srand(time(NULL));
+    int num = rand()%100 + 1;
+    return num;
+}
+
+// Random number between 1 and 20
+int getRandomNumber20() {
+    srand(time(NULL));
+    int num = rand()%20 + 1;
+    return num;
+}
+
+// Random number between 1 and sides
+int rollDice(int sides) {
+    srand(time(NULL));
+    int num = rand()%sides + 1;
+    return num;
+}

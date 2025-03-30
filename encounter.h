@@ -18,4 +18,6 @@ void describeShop(Inventory * inventory);
 void purchaseDialog(Player * player, Inventory * shop);
 void purchaseItem(Player * player, Inventory * shop, char * itemName);  
 Encounter * pickRandomEncounter();
+Encounter * createQuestEncounter();
+Encounter * createExitEncounter();
 #endif

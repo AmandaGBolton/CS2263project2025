@@ -11,6 +11,7 @@
 void freePlayer(Player *player) {
     // Need to free inventory in whatever way is appropriate^
     freeInventory(player->inventory);
+    free(player->name);
     free(player);
 }
 
@@ -31,29 +32,35 @@ Player *createPlayer(int hp, int att, int def, int agl, char* name) {
 }
 
 char * getPlayerName() {
-    char playerName[20];
+    char name[21];
     printf("What is your name? (Max 20 characters) ");
-    scanf(" %s", playerName);
-    while (playerName[0] == '\0' || strlen(playerName) > 20) {
+    scanf(" %s", name);
+    while (name[0] == '\0' || strlen(name) > 20) {
         printf("\nThat isn't right. Please enter a valid name. ");
-        scanf(" %c", &playerName);
+        scanf(" %s", name);
+    }    
+    char * playerName = malloc(strlen(name)+1);
+    if(playerName == NULL) {
+        printf("Memory allocation failed!\n");
+        exit(1);
     }
-    char * name = playerName;
-    printf("\nWelcome to the game %c!\n", playerName);
-    return name;
+    strcpy(playerName, name);
+
+    printf("\nWelcome to the game %s!\n", playerName);
+    return playerName;
 }
 
 // Add starting items. Armor, sword, 1 HP potion, 5 gold.
 // Still need to figure out gold and inventory
 // Also figure out inventory items in general so they have stats (type Item)
 // Ideally import Item, make copy of desired item to add to player inventory
-void *equipStartingPlayer(Player *player) {
+void equipStartingPlayer(Player *player) {
     starterInventory(player);
     adjustStats(player);
 }
 
 // Heal for the given number of HP, checking against max HP
-void heal(Player *player, int hpRegained){
+void healPlayer(Player *player, int hpRegained){
     int currentHP = player->hp;
     currentHP += 5;
     //Check if over max and reduce if needed
@@ -102,7 +109,8 @@ void adjustStats(Player *player) {
                 }
             } else {
                 // Check if item is not already in list
-                if (!isInInventory(tempList, temp->item)) {
+                int present = isInInventory(tempList, temp->item);
+                if (present != 0) {
                     // Add item to list
                     addToInventory(tempList, temp->item);
                     objAtt += temp->item->mod;
@@ -117,14 +125,16 @@ void adjustStats(Player *player) {
             }
             else {
                 // Check if item is not already in list
-                if (!isInInventory(tempList, temp->item)) {
+                int present = isInInventory(tempList, temp->item);
+                if (present != 0) {
                     // Add item to list
                     addToInventory(tempList, temp->item);
                     objDef += temp->item->mod;
                 }
             }
         } else if (strcmp(temp->item->stat, "AGL") == 0) {
-            if (!isInInventory(tempList, temp->item)) {
+                int present = isInInventory(tempList, temp->item);
+                if (present != 0) {
                 // Add item to list
                 addToInventory(tempList, temp->item);
                 agl += temp->item->mod;

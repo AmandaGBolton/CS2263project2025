@@ -19,4 +19,5 @@ Scenario * pickScenario();
 void triggerScenario(Scenario * scenario, Player * player);
 Scenario * createQuestRoom();
 Scenario * createExitRoom();
+void startStory(Player * player);
 #endif

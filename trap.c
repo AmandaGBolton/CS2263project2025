@@ -13,11 +13,43 @@ Trap * createTrap(char* prompt, char* failStory, char* successStory, int damage,
         printf("Memory allocation failed!\n");
         exit(1);
     }
-    trap->prompt = prompt;
-    trap->failStory = failStory;
-    trap->successStory = successStory;
+    
+    trap->prompt = strdup(prompt);
+    if (!trap->prompt) {
+        printf("Memory allocation for prompt failed!\n");
+        free(trap);
+        exit(1);
+    }
+
+    trap->failStory = strdup(failStory);
+    if (!trap->failStory) {
+        printf("Memory allocation for failStory failed!\n");
+        free(trap->prompt);
+        free(trap);
+        exit(1);
+    }
+
+    trap->successStory = strdup(successStory);
+    if (!trap->successStory) {
+        printf("Memory allocation for successStory failed!\n");
+        free(trap->failStory);
+        free(trap->prompt);
+        free(trap);
+        exit(1);
+    }
+
+// Copy the damageType string
+    trap->damageType = strdup(damageType);
+    if (!trap->damageType) {
+        printf("Memory allocation for damageType failed!\n");
+        free(trap->successStory);
+        free(trap->failStory);
+        free(trap->prompt);
+        free(trap);
+        exit(1);
+    }
+
     trap->damage = damage;
-    trap->damageType = damageType;
     trap->savingThrowReq = savingThrowReq;
     trap->reward = reward;
     return trap;    
@@ -25,6 +57,10 @@ Trap * createTrap(char* prompt, char* failStory, char* successStory, int damage,
 
 void freeTrap(Trap * trap){
     free(trap->reward);
+    free(trap->damageType);
+    free(trap->successStory);
+    free(trap->failStory);
+    free(trap->prompt);
     free(trap);
 }
 

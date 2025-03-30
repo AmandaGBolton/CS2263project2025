@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "item.h"
+#include "encounter.h"
 
 // Saving player should record current stats (incld HP) and inventory^
 
-int getRandomNumber();
-
 // Function to free a player from memory (e.g., on death)
 void freeItem(Item *item) {
+    free(item->name);
     free(item);
 }
 
@@ -22,7 +22,12 @@ Item * createItem(char * stat, int mod, char* name) {
     }
     item->stat = stat;
     item->mod = mod;
-    item->name = name;
+    item->name = strdup(name); 
+    if (!item->name) {
+        printf("Memory allocation for item name failed!\n");
+        free(item); // Free the item structure to avoid memory leaks
+        exit(1);
+    }
     return item;
 }
 
@@ -31,57 +36,46 @@ Item * createItem(char * stat, int mod, char* name) {
 // Method uses a helper to translate string into char used by switch
 Item * generateItem(char * itemType, int num){
     char desiredItem = getItemType(itemType);
+    Item * item;
 
     switch(desiredItem) {
         case 'p':
-            Item * item = createItem('HP', 1, "healing potion");
-            return item;
+            item = createItem("HP", 1, "healing potion");
         case 'r':
-            Item * item = createItem('AGL', 1, "agility ring");
-            return item;
+            item = createItem("AGL", 1, "agility ring");
         case 'g':
-            Item * item = createItem('AGL', 2, "agility amulet");
-            return item;
+            item = createItem("AGL", 2, "agility amulet");
         case 't':
-            Item * item = createItem('ATT', 2, "strength amulet");
-            return item;
+            item = createItem("ATT", 2, "strength amulet");
         case 's':
-            Item * item = createItem('ATT', 1, "sword");
-            return item;
+            item = createItem("ATT", 1, "sword");
         case 'b':
-            Item * item = createItem('ATT', 2, "bronze sword");
-            return item;
+            item = createItem("ATT", 2, "bronze sword");
         case 'i':
-            Item * item = createItem('ATT', 3, "iron sword");
-            return item;
+            item = createItem("ATT", 3, "iron sword");
         case 'm':
-            Item * item = createItem('ATT', 4, "mythic sword");
-            return item;
-        case 'A':
-            Item * item = createItem('DEF', 1, "armor");
-            return item;
-        case 'B':
-            Item * item = createItem('DEF', 2, "bronze armor");
-            return item;
-        case 'I"':
-            Item * item = createItem('DEF', 3, "iron armor");
-            return item;
-        case 'M':
-            Item * item = createItem('DEF', 4, "mythic armor");
-            return item;
+            item = createItem("ATT", 4, "mythic sword");
+        case 'a':
+            item = createItem("DEF", 1, "armor");
+        case 'z':
+            item = createItem("DEF", 2, "bronze armor");
+        case 'n':
+            item = createItem("DEF", 3, "iron armor");
+        case 'y':
+            item = createItem("DEF", 4, "mythic armor");
         case 'c':
-            Item * item = createItem('GOLD', num, "coin purse");
-            return item;
-        case 'P':
-            Item * item = createItem('POTION', num, "potion belt");
-            return item;
+            item = createItem("GOLD", num, "coin purse");
+        case 'l':
+            item = createItem("POTION", num, "potion belt");
         default:
             printf("Invalid item type.\n");
+            free(item);
             return NULL;
     }
+    return item;
 }
 
-char desiredItem(char * itemName) {
+char getItemType(char * itemName) {
      if(strcmp(itemName, "potion") == 0){
         return 'p';
     } else if(strcmp(itemName,"agility ring") == 0){
@@ -99,20 +93,20 @@ char desiredItem(char * itemName) {
     } else if(strcmp(itemName, "mythic sword") == 0) {
         return 'm';
     } else if(strcmp(itemName, "armor") == 0) {
-        return 'A';
+        return 'a';
     } else if(strcmp(itemName, "bronze armor") == 0) {
-        return 'B';
+        return 'z';
     } else if(strcmp(itemName, "iron armor") == 0) {
-        return 'I';
+        return 'n';
     } else if(strcmp(itemName ,"mythic armor") == 0) {
-        return 'M';
+        return 'y';
     } else if(strcmp(itemName, "coin purse") == 0) {
         return 'c';
     } else if(strcmp(itemName, "potion belt") == 0) {
-        return 'P';
+        return 'l';
     } else {
         printf("Invalid item name.\n");
-        return NULL;
+        return '\0';
     }
 }
      
