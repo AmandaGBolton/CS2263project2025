@@ -7,11 +7,12 @@
 #include "inventory.h"
 #include "scenario.h"
 
-#define WIDTH 5
-#define HEIGHT 5
+#define WIDTH 10
+#define HEIGHT 10
 
 typedef struct Room {
     int x, y;
+    int visited;
     struct Room *north, *south, *east, *west;
 } Room;
 
@@ -27,12 +28,20 @@ Room *createRoom(int x, int y);
 Dungeon *createDungeon();
 
 // Function to move the player
-void movePlayer(Dungeon *dungeon, char direction);
+void movePlayer(Dungeon *dungeon, char direction); // Updated to void
 
 // Function to save dungeon layout
-void saveDungeon(Dungeon *dungeon, const char *filename);
+void saveDungeon(Dungeon *dungeon, const char *filename); // No change
 
-// Function to free memory
+//function to free memory
 void freeDungeon(Dungeon *dungeon);
+
+// Function to load dungeon layout
+Dungeon *loadDungeon(const char *filename);
+
+// Function to display the dungeon layout
+void displayDungeon(Dungeon *dungeon);
+// Recursive function to explore the dungeon
+void exploreDungeon(Room *room);
 
 #endif

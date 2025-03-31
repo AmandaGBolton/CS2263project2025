@@ -31,6 +31,36 @@ int main(int argc, char **argv) {
     // Start story
     startStory(currentPlayer);
 
+    // Create dungeon and load previous state if exists
+    Dungeon *dungeon = NULL;
+    FILE *f = fopen("dungeon.txt", "r");
+    if (f) {
+        fclose(f);
+        dungeon = loadDungeon("dungeon.txt");
+        printf("Loaded saved dungeon.\n");
+    } else {
+        dungeon = createDungeon();
+        dungeon->player->visited = 1; // Mark starting room as visited
+        printf("Created new dungeon.\n");
+    }
+
+    // Display the dungeon layout
+    displayDungeon(dungeon);
+
+    printf("Use N, S, E, W to move. Q to quit.\n");
+    char command;
+    while (1) {
+        printf("Enter command: ");
+        scanf(" %c", &command);
+        if (command == 'Q') break;
+        movePlayer(dungeon, command);
+    }
+
+    // Save and free dungeon
+    saveDungeon(dungeon, "dungeon.txt");
+    freeDungeon(dungeon);
+    printf("Game over. Dungeon saved!\n");
+
     // TESTING 
     Scenario * currentScenario = pickScenario();
     triggerScenario(currentScenario, currentPlayer);
