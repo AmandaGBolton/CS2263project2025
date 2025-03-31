@@ -37,13 +37,16 @@ Scenario * pickScenario(){
     // Randomly pick a scenario
     int r = getRandomNumber();
     if (r < 20){
+        // printf("Generate a trap\n");
         // Traps
         return createScenario(createRandomTrap(), NULL, NULL);
     } else if (r < 66){
         // Encounters
+        // printf("Generate an encounter\n");
         return createScenario(NULL, pickRandomEncounter(), NULL);
     } else {
         // Monsters
+        // printf("Generate a monster\n");
         return createScenario(NULL, NULL, pickRandomMonster());
     }
 }
@@ -54,8 +57,13 @@ void triggerScenario(Scenario * scenario, Player * player){
     if (scenario->trap != NULL){
         attemptTrap(player, scenario->trap);
     } else if (scenario->encounter != NULL){
-        describeShop(scenario->encounter->inventory);
-        purchaseDialog(player, scenario->encounter->inventory);
+        printf("%s", scenario->encounter->prompt);
+         // Check if the prompt contains "5 gold"
+        if (strstr(scenario->encounter->prompt, "5 gold") != NULL) {
+            describeShop(scenario->encounter->inventory);
+            purchaseDialog(player, scenario->encounter->inventory);
+        }
+        printf("%s", scenario->encounter->thanksMsg);
     } else if (scenario->monster != NULL){
         fightOrFlight(scenario->monster, player);
     } else {
@@ -72,38 +80,43 @@ Scenario * createExitRoom(){
 }
 
 void startStory(Player * player){
-    printf("***************@***************\n");
-    printf("Welcome, %s\n!", player->name);
+    printf("\n***************@***************\n");
+    printf("Welcome, %s!\n", player->name);
     printf("The village elder has call on you to retrieve a magical goblet that is hidden in the dungeon.\n");
     printf("The goblet is said to have the power to heal the sick and wounded.\n");
     printf("You must find the goblet and return it to the village before it is too late.\n");
-    printf("-------------------------------\n");
+    printf("\n");
     printf("But beware, the dungeon is full of traps, monsters, and other dangers.\n");
-    printf("And you realize the way out is NOT the way in as they drop you into a hole.");
-    printf("-------------------------------\n");
+    printf("And you realize the way out is NOT the way in as they drop you into a hole.\n");
+    printf("\n");
     printf("You have been given a sword and armor, one health potion, and 5 gold to start.\n");
     printf("You have 20 HP, and healing potions will heal 5 HP.");
     printf("Good luck!\n");
-    printf("***************@***************\n");
+    printf("***************@***************\n\n");
+}
+
+void initializeRandom() {
+    srand((unsigned int)time(NULL)); // Seed the random number generator
 }
 
 // Random number between 1 and 100
 int getRandomNumber() {
-    srand((unsigned int)time(NULL));
     int num = rand()%100 + 1;
+    // printf("Generated random number: %d", num);
     return num;
 }
 
 // Random number between 1 and 20
 int getRandomNumber20() {
-    srand((unsigned int)time(NULL));
     int num = rand()%20 + 1;
+    // printf("Generated random number: %d", num);
     return num;
 }
 
 // Random number between 1 and sides
+// This could replace the other two but I don't want to search and change them
 int rollDice(int sides) {
-    srand((unsigned int)time(NULL));
     int num = rand()%sides + 1;
+    // printf("Generated random number: %d", num);
     return num;
 }

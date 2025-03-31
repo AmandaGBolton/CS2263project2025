@@ -12,6 +12,8 @@
 
 //Initalize the main function
 int main(int argc, char **argv) {
+    initializeRandom();
+
     // Ask player for name and create Player
     char * playerName = getPlayerName();
     
@@ -24,10 +26,12 @@ int main(int argc, char **argv) {
     // printf("Player's attack is %d\n", currentPlayer->att);
     // printf("Player's defense is %d\n", currentPlayer->def);
     // printf("Player's agility is %d\n", currentPlayer->agl);
-    // displayInventory(currentPlayer->inventory);
+    displayInventory(currentPlayer->inventory);
 
     // Start story
     startStory(currentPlayer);
 
     // TESTING 
+    Scenario * currentScenario = pickScenario();
+    triggerScenario(currentScenario, currentPlayer);
 }

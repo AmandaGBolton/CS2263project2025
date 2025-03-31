@@ -42,6 +42,7 @@ Player *createPlayer(int hp, int att, int def, int agl, char* name) {
 
 char * getPlayerName() {
     char name[21];
+    printf("*********** TREASURE QUEST ***********\n");
     printf("What is your name? (Max 20 characters) ");
     scanf(" %s", name);
     while (name[0] == '\0' || strlen(name) > 20) {
@@ -156,6 +157,7 @@ void adjustStats(Player *player) {
     player->att = 1 + att + objAtt;
     player->def = 1 + def + objDef;
     player->agl = agl;
+    printf("Your current stats > HP: %d, ATT: +%d, DEF: +%d, AGL: +%d, Gold: %d, Potions: %d\n", player->hp, player->att, player->def, player->agl, getCurrentGold(player), getCurrentPotions(player));
     free(tempList);
     free(temp);
 }

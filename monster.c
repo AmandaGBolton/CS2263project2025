@@ -161,13 +161,15 @@ Monster *createDog() {
 
 void fightOrFlight(Monster * monster, Player * player) {
     // Player prompt with monster description
+    printf("\n!!!!!!!!!!!!!!! Danger !!!!!!!!!!!!!!!\n");
     printf("There is a monster in the room!\n");
-    printf("It is a %s. What will you do? Fight (F) or run (R)?\n", monster->name);
+    printf("It is a %s. You see it guarding something: %s\n", monster->name, monster->inventory->item->name); 
+    printf("What will you do? Fight (F) or run (R)?\n");
     char choice;
-    scanf("%c", &choice);
-    if(choice=='R') {
+    scanf(" %c", &choice);
+    if(choice=='R' || choice=='r') {
         // Do navigation options^
-    } else if (choice=='F') {
+    } else if (choice =='F' || choice == 'f') {
         fightMonster(monster, player);
     } else {
         printf("Invalid choice. Please enter F or R.\n");
@@ -181,9 +183,11 @@ void fightMonster(Monster * monster, Player * player) {
     int playerRoll = rollDice(20);
     int playerAtt = player->att;
     int playerFinal = playerRoll + playerAtt;
+    printf("\nYou rolled a %d including your +%d modifier. ", playerFinal, playerAtt);
     int monsterDef = monster->def + 10;
+    printf("The monster's defence is %d\n", monsterDef);
     if (playerFinal > monsterDef) {
-        int damagerRoll = rollDice(4);
+        int damagerRoll = rollDice(2);
         int damage = player->att + damagerRoll - monster->def;
         if (damage < 0) {
             damage = 0;
@@ -196,20 +200,22 @@ void fightMonster(Monster * monster, Player * player) {
             pickUpItem(player, monster->inventory->item);
             // Adjust player stats
             adjustStats(player);
+            free(monster);
         } else {
             printf("The monster has %d health left.\n", monster->hp);
-            printf("The monster attacks you!\n");
+            printf("\nThe monster attacks you!\n");
             // Monster attacks player
-            int damage = monster->att - player->def;
-            if (damage < 0) {
-                damage = 0;
+            int damagerRoll = rollDice(2);
+            int damage = damagerRoll + monster->att - player->def;
+            if (damage < 1) {
+                damage = 1;
             }
             isPlayerDead(player, damage);
             fightOrFlight(monster, player);
         }
     } else {
         printf("You missed the monster!\n");
-        printf("The monster attacks you!\n");
+        printf("\nThe monster attacks you!\n");
         // Monster attacks player
         int damage = monster->att - player->def;
         if (damage < 0) {
