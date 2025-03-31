@@ -47,7 +47,7 @@ Item * createItem(char * stat, int mod, char* name) {
 // Method uses a helper to translate string into char used by switch
 Item * generateItem(char * itemType, int num){
     char desiredItem = getItemType(itemType);
-    Item * item;
+    Item * item = NULL;
 
     switch(desiredItem) {
         case 'p':

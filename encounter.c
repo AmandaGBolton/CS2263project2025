@@ -86,51 +86,49 @@ void purchaseDialog(Player *player, Inventory *shop) {
 }
 
 // Checks for sufficient gold, does inventory management
-void purchaseItem(Player * player, Inventory * shop, char * itemName){
+void purchaseItem(Player *player, Inventory *shop, char *itemName) {
     // Get the item from the inventory
-    Inventory * current = shop;
-    Inventory * prev = NULL;
-    while (current != NULL){
-        if (strcmp(current->item->name, itemName) == 0){
+    Inventory *current = shop;
+    Inventory *prev = NULL;
+
+    while (current != NULL) {
+        if (strcmp(current->item->name, itemName) == 0) {
             break;
         }
         prev = current;
         current = current->next;
     }
-    if (current == NULL){
+
+    if (current == NULL) {
         printf("Item %s not found in shop inventory.\n", itemName);
         return;
     }
 
     // Check if player has enough gold
     int currentGold = getCurrentGold(player);
-    if (currentGold < 5){
+    if (currentGold < 5) {
         printf("You do not have enough gold to purchase %s.\n", itemName);
         return;
     }
 
-    // Pay for it
+    // Deduct gold from the player's inventory
     dropItem(player->inventory, "coin purse", 5);
-    // Add item to player inventory
-    pickUpItem(player, current->item);
 
-    // Remove item from shop inventory
-    if (prev == NULL){
+    // Create a copy of the item and add it to the player's inventory
+    Item *itemCopy = createItem(current->item->stat, current->item->mod, current->item->name);
+    pickUpItem(player, itemCopy);
+
+    // Remove the item from the shop inventory
+    if (prev == NULL) {
         shop = current->next;
     } else {
         prev->next = current->next;
     }
-    free(current->item);
-    free(current);
+ 
+    free(current->item); // Free the original item in the shop
+    free(current);       // Free the shop inventory node
 
-    printf("You purchased %s\n", itemName);
-
-    /// Check if the shop is empty
-    if (shop == NULL) {
-        printf("\nThe shop is now empty.\n");
-        free(shop);
-        return;
-    } 
+    printf("You purchased %s.\n", itemName);
 }
 
 Encounter * createQuestEncounter(){

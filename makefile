@@ -17,11 +17,10 @@ $(TARGET): $(OBJS)
 
 # Clean up compiled files
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJS) $(TARGET) $(TEST_OBJS) $(TEST_EXE)
 
 # Unit test target
-# This is test section for the map section I hope it gives you all some idea of how to do yours
-TEST_SRCS = test_game.c dungeon.c
+TEST_SRCS = test_game.c dungeon.c player.c inventory.c item.c scenario.c encounter.c trap.c monster.c
 TEST_OBJS = $(TEST_SRCS:.c=.o)
 TEST_EXE = test_game
 
