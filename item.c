@@ -51,7 +51,7 @@ Item * generateItem(char * itemType, int num){
 
     switch(desiredItem) {
         case 'p':
-            item = createItem("HP", 1, "healing potion");
+            item = createItem("POTION", num, "potion belt");
             break;
         case 'r':
             item = createItem("AGL", 1, "agility ring");
@@ -89,9 +89,6 @@ Item * generateItem(char * itemType, int num){
         case 'c':
             item = createItem("GOLD", num, "coin purse");
             break;
-        case 'l':
-            item = createItem("POTION", num, "potion belt");
-            break;
         default:
             printf("Invalid item type.\n");
             free(item);
@@ -101,7 +98,9 @@ Item * generateItem(char * itemType, int num){
 }
 
 char getItemType(char * itemName) {
-     if(strcmp(itemName, "potion") == 0){
+     if (strcmp(itemName, "potion") == 0 || 
+    strcmp(itemName, "healing potion") == 0 || 
+    strcmp(itemName, "potion belt") == 0) {
         return 'p';
     } else if(strcmp(itemName,"agility ring") == 0){
         return 'r';
@@ -127,8 +126,6 @@ char getItemType(char * itemName) {
         return 'y';
     } else if(strcmp(itemName, "coin purse") == 0) {
         return 'c';
-    } else if(strcmp(itemName, "potion belt") == 0) {
-        return 'l';
     } else if(strcmp(itemName, "gold") == 0) {
         return 'c';
     } else {
@@ -144,22 +141,16 @@ Item * getLowItem(){
     Item * item;
     // Probability roll, need to test if this works
     int r = getRandomNumber();
-    switch(r){
-        case 0 ... 19:
-            item = generateItem("potion", 1);
-            break;
-        case 20 ... 39:
-            item = generateItem("agility ring", 1);
-            break;
-        case 40 ... 59:
-            item = generateItem("sword", 1);
-            break;
-        case 60 ... 79:
-            item = generateItem("bronze armor", 1);
-            break;
-        default:
-            item = generateItem("coin purse", 10);
-            break;
+    if (r >= 0 && r <= 19) {
+        item = generateItem("potion belt", 1);
+    } else if (r >= 20 && r <= 39) {
+        item = generateItem("agility ring", 1);
+    } else if (r >= 40 && r <= 59) {
+        item = generateItem("sword", 1);
+    } else if (r >= 60 && r <= 79) {
+        item = generateItem("bronze armor", 1);
+    } else {
+        item = generateItem("coin purse", 10);
     }
     return item;
 }
@@ -168,22 +159,16 @@ Item * getMidItem(){
     Item * item;
     int r = getRandomNumber();
 
-    switch(r){
-        case 0 ... 19:
-            item = generateItem("potion belt", 2);
-            break;
-        case 20 ... 39:
-            item = generateItem("agility amulet", 1);
-            break;
-        case 40 ... 59:
-            item = generateItem("iron sword", 1);
-            break;
-        case 60 ... 79:
-            item = generateItem("iron armor", 1);
-            break;
-        default:
-            item = generateItem("coin purse", 15);
-            break;
+    if (r >= 0 && r <= 19) {
+        item = generateItem("potion belt", 2);
+    } else if (r >= 20 && r <= 39) {
+        item = generateItem("agility amulet", 1);
+    } else if (r >= 40 && r <= 59) {
+        item = generateItem("iron sword", 1);
+    } else if (r >= 60 && r <= 79) {
+        item = generateItem("iron armor", 1);
+    } else {
+        item = generateItem("coin purse", 15);
     }
     return item;
 }
@@ -192,22 +177,16 @@ Item * getHighItem(){
     Item * item;
     int r = getRandomNumber();
 
-    switch (r) {
-    case 0 ... 19:
-        item = generateItem("potin belt", 5);
-        break;
-    case 20 ... 39:
+   if (r >= 0 && r <= 19) {
+        item = generateItem("potion belt", 5);
+    } else if (r >= 20 && r <= 39) {
         item = generateItem("strength amulet", 1);
-        break;
-    case 40 ... 59:
+    } else if (r >= 40 && r <= 59) {
         item = generateItem("mythic sword", 1);
-        break;
-    case 60 ... 79:
+    } else if (r >= 60 && r <= 79) {
         item = generateItem("mythic armor", 1);
-        break;
-    default:
+    } else {
         item = generateItem("coin purse", 20);
-        break;
     }
     return item;
 }

@@ -22,4 +22,6 @@ void dropItem(Inventory *inventory, char *itemName, int num);
 Item * findItem(Inventory *inventory, char *itemName);
 void displayInventory(Inventory *inventory);
 int isInInventory(Inventory * list, Item * item);
+int getCurrentGold(Player * player);
+int getCurrentPotions(Player * player);
 #endif

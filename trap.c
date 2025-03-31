@@ -79,7 +79,7 @@ void attemptTrap(Player * player, Trap * trap){
         savingThrowMod = 0;
     }
 
-    int savingThrow = getRandomNumber() + savingThrowMod;
+    int savingThrow = rollDice(20) + savingThrowMod;
     
     printf("You rolled a %d including your +%d modifier.\n", savingThrow, savingThrowMod);
 

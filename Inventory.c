@@ -49,13 +49,33 @@ void starterInventory(Player *player) {
 
 // Adds to the end of the inventory
 void addToInventory(Inventory *inventory, Item *item) {
-    Inventory * node = createInventoryNode(item, NULL, NULL);
-    Inventory * temp = inventory;
-    while (temp->next != NULL) {
-        temp = temp->next;
+
+     if(strcmp(item->name,"gold") == 0 || strcmp(item->name, "coin purse") == 0 || strcmp(item->name, "healing potion") == 0 || strcmp(item->name, "potion belt") == 0) {
+        Inventory * temp = inventory;
+        while (temp != NULL) {
+            if (strcmp(temp->item->name, item->name) == 0) {
+                temp->item->mod += item->mod;
+                printf("%d was added to %s\n", item->mod, temp->item->name);
+                return;
+            }
+            temp = temp->next;
+        }
     }
-    temp->next = node;
-    node->prev = temp;
+
+    // If it isn't gold or potions, add a new node
+    Inventory * newNode = createInventoryNode(item, NULL, NULL);
+    if (inventory == NULL) {
+        inventory = newNode; // If the inventory is empty, set the new node as the head
+    } else {
+        Inventory *temp = inventory;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+        newNode->prev = temp;
+    }
+    
+    printf("Added %s to inventory.\n", item->name);
 }
 
 // adds to inventory and prints item that was picked up
@@ -65,15 +85,12 @@ void pickUpItem(Player *player, Item * item) {
     } else {
         addToInventory(player->inventory, item);
     }    
-    printf("Picked up: %s\n", item->name);
-    
-    
 }
 
 // remove item from inventory
 void dropItem(Inventory *inventory, char *itemName, int num) {
     // When gold or potion, only subtract from total in item to a max low of 0
-    if(strcmp(itemName,"gold") == 0 || strcmp(itemName, "potion") == 0) {
+    if(strcmp(itemName,"gold") == 0 || strcmp(itemName, "coin purse") == 0 || strcmp(itemName, "healing potion") == 0 || strcmp(itemName, "potion belt") == 0) {
         Inventory * temp = inventory;
         while (temp != NULL) {
             if (strcmp(temp->item->name, itemName) == 0) {
@@ -81,6 +98,7 @@ void dropItem(Inventory *inventory, char *itemName, int num) {
                 if (temp->item->mod < 0) {
                     temp->item->mod = 0;
                 }
+                printf("%s now has %d remaining\n", temp->item->name, temp->item->mod);
                 return;
             }
             temp = temp->next;
@@ -107,24 +125,27 @@ void dropItem(Inventory *inventory, char *itemName, int num) {
         }
         temp = temp->next;
     }
-    printf("Item not found in inventory.\n");
 }
 
 // function to display inventory printing its contents in order
 void displayInventory(Inventory *inventory) {
-    printf("Inventory: ");
-    Inventory * temp = inventory;
+    printf("Current Inventory: ");
+    Inventory *temp = inventory;
     while (temp != NULL) {
-        if(strcmp(inventory->item->name,"gold") == 0) {
+        if (strcmp(temp->item->name, "gold") == 0) {
             printf("%d gold ", temp->item->mod);
-        } else if(strcmp(inventory->item->name, "potion") == 0) {
+        } else if (strcmp(temp->item->name, "coin purse") == 0) {
+            printf("%d gold in your coin purse ", temp->item->mod);
+        } else if (strcmp(temp->item->name, "healing potion") == 0) {
+            printf("%d potions ", temp->item->mod);
+        } else if (strcmp(temp->item->name, "potion belt") == 0) {
             printf("%d potions ", temp->item->mod);
         } else {
-        printf("%s ", temp->item->name);
-        temp = temp->next;
+            printf("%s ", temp->item->name);
+        }
+        temp = temp->next; // Move to the next node
     }
-    printf("\n");   
-    }
+    printf("\n");
 }
 
 int isInInventory(Inventory * list, Item * item) {
@@ -141,10 +162,21 @@ int isInInventory(Inventory * list, Item * item) {
 Item * findItem(Inventory * inventory, char * itemName) {
     Inventory * temp = inventory;
     while (temp != NULL) {
-        if (strcmp(temp->item->name, itemName) == 0) {
+        if (temp->item != NULL && strcmp(temp->item->name, itemName) == 0) {
             return temp->item;
         }
         temp = temp->next;
     }
+    printf("Failed to find %s in inventory", itemName);
     return NULL;
+}
+
+int getCurrentGold(Player * player) {
+    Item * gold = findItem(player->inventory, "coin purse");
+    return gold->mod;
+}
+
+int getCurrentPotions(Player * player) {
+    Item * potion = findItem(player->inventory, "potion belt");
+    return potion->mod;
 }

@@ -1,19 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "dungeon.h"
 
 #define WIDTH 5
 #define HEIGHT 5
-
-typedef struct Room {
-    int x, y;
-    struct Room *north, *south, *east, *west;
-} Room;
-
-typedef struct {
-    Room *rooms[HEIGHT][WIDTH];
-    Room *player;
-} Dungeon;
 
 // Function to create a room
 Room *createRoom(int x, int y) {
