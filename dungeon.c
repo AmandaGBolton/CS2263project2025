@@ -86,7 +86,7 @@ void movePlayer(Dungeon *dungeon, char direction) {
         printf("Moved to room (%d, %d)\n", next->x, next->y);
         displayDungeon(dungeon);
     } else {
-        printf("You can't go that way!\n");
+        printf("You hit a wall. You can't go that way. Ouch!\n");
     }
 }
 
