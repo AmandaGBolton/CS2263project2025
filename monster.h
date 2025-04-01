@@ -9,6 +9,7 @@ typedef struct {
     int def;
     struct Inventory * inventory;
     char* name;
+    int dead;
 } Monster;
 
 // Method signatures go here

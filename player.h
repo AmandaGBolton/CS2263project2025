@@ -17,4 +17,5 @@ void healPlayer(Player *player, int hpRegained);
 void isPlayerDead(Player *player, int damage);
 void adjustStats(Player *player);
 char * getPlayerName();
+int hasGoblet(Player *player);
 #endif

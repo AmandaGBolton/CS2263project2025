@@ -19,13 +19,6 @@ int main(int argc, char **argv) {
     
     Player * currentPlayer;  
     currentPlayer = createPlayer(20, 1, 1, 0, playerName);
-
-    // TESTING Player initialization only:
-    // printf("Player's name is %s\n", currentPlayer->name);
-    // printf("Player's HP is %d\n", currentPlayer->hp);
-    // printf("Player's attack is %d\n", currentPlayer->att);
-    // printf("Player's defense is %d\n", currentPlayer->def);
-    // printf("Player's agility is %d\n", currentPlayer->agl);
     displayInventory(currentPlayer->inventory);
 
     // Start story
@@ -46,14 +39,53 @@ int main(int argc, char **argv) {
 
     // Display the dungeon layout
     displayDungeon(dungeon);
+    printf("COORDS TO CHEAT ARE %d, %d & %d, %d\n", dungeon->questX, dungeon->questY, dungeon->exitX, dungeon->exitY);
 
-    printf("Use N, S, E, W to move. Q to quit.\n");
+    printf("Use N, S, E, W to move. H to heal. I to show current inventory. Q to quit.\n");
     char command;
     while (1) {
         printf("Enter command: ");
         scanf(" %c", &command);
-        if (command == 'Q') break;
+        if (command == 'Q' || command == 'q') break;
+        if (command == 'H' || command == 'h') {
+            healPlayer(currentPlayer, 1);
+            continue;
+        }
+        if (command == 'i' || command == 'I') {
+            displayInventory(currentPlayer->inventory);
+            continue;
+        }
         movePlayer(dungeon, command);
+
+        // Get the player's current position
+        int currentX = dungeon->player->x;
+        int currentY = dungeon->player->y;
+
+        // Access the current room
+        Room *currentRoom = dungeon->rooms[currentY][currentX];
+
+        // Assign a scenario if the room's scenario is NULL
+        if (currentRoom->scenario == NULL) {
+            if (currentX == dungeon->questX && currentY == dungeon->questY) {
+                // Assign the quest scenario
+                currentRoom->scenario = createQuestRoom();
+            } else if (currentX == dungeon->exitX && currentY == dungeon->exitY) {
+                // Assign the exit scenario
+                currentRoom->scenario = createExitRoom();
+            } else {
+                // Assign a random scenario
+                currentRoom->scenario = pickScenario();
+            }
+        } else {
+            if(currentX == dungeon->exitX && currentY == dungeon->exitY) {
+                    if(hasGoblet(currentPlayer) == 1) {
+                    printf("You have found the exit with the goblet and have won the game!\n");
+                    break;
+                    }
+            }
+        }
+
+        triggerScenario(dungeon->rooms[currentY][currentX]->scenario, currentPlayer);
     }
 
     // Save and free dungeon
@@ -62,6 +94,5 @@ int main(int argc, char **argv) {
     printf("Game over. Dungeon saved!\n");
 
     // TESTING 
-    Scenario * currentScenario = pickScenario();
-    triggerScenario(currentScenario, currentPlayer);
+    // Scenario * currentScenario = pickScenario();
 }

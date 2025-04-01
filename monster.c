@@ -52,6 +52,7 @@ Monster *createMonster(int hp, int att, int def, Item * reward, char* name) {
     monster->hp = hp;
     monster->att = att;
     monster->def = def;
+    monster->dead = 0;
     Inventory * inventory = createInventoryNode(reward, NULL, NULL);
     if (!inventory) {
         printf("Memory allocation failed!\n");
@@ -200,7 +201,8 @@ void fightMonster(Monster * monster, Player * player) {
             pickUpItem(player, monster->inventory->item);
             // Adjust player stats
             adjustStats(player);
-            free(monster);
+            monster->dead = 1;
+            // free(monster);
         } else {
             printf("The monster has %d health left.\n", monster->hp);
             printf("\nThe monster attacks you!\n");

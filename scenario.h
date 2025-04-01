@@ -3,9 +3,12 @@
 #include "player.h"
 #include "item.h"
 #include "inventory.h"
-#include "encounter.h"
 #include "trap.h"
 #include "monster.h"
+
+// Forward declaration of Encounter
+struct Encounter;
+typedef struct Encounter Encounter;
 
 typedef struct Scenario {
     Encounter * encounter;

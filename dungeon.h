@@ -14,11 +14,14 @@ typedef struct Room {
     int x, y;
     int visited;
     struct Room *north, *south, *east, *west;
+    Scenario *scenario;
 } Room;
 
 typedef struct {
     Room *rooms[HEIGHT][WIDTH];
     Room *player;
+    int questX, questY;
+    int exitX, exitY;
 } Dungeon;
 
 // Function to create a room

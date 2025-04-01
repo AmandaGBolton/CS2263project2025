@@ -60,12 +60,20 @@ void triggerScenario(Scenario * scenario, Player * player){
         printf("%s", scenario->encounter->prompt);
          // Check if the prompt contains "5 gold"
         if (strstr(scenario->encounter->prompt, "5 gold") != NULL) {
-            describeShop(scenario->encounter->inventory);
-            purchaseDialog(player, scenario->encounter->inventory);
+            if (scenario->encounter->inventory != NULL) {
+                describeShop(scenario->encounter->inventory);
+                purchaseDialog(player, scenario->encounter->inventory, scenario);
+            } else {
+                printf("You have found a shop that is out of inventory.\n");
+            }
         }
         printf("%s", scenario->encounter->thanksMsg);
     } else if (scenario->monster != NULL){
-        fightOrFlight(scenario->monster, player);
+        if(scenario->monster->dead == 0){
+            fightOrFlight(scenario->monster, player);
+        } else {
+            printf("You have found a room with a dead monster.\n");
+        }
     } else {
         printf("You have found an empty room.\n");
     }

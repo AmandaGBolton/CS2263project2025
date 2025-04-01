@@ -25,7 +25,7 @@ Dungeon *createDungeon() {
         exit(1);
     }
     memset(dungeon->rooms, 0, sizeof(dungeon->rooms));
-    
+
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
             dungeon->rooms[y][x] = createRoom(x, y);
@@ -41,6 +41,20 @@ Dungeon *createDungeon() {
             if (x < WIDTH - 1) room->east = dungeon->rooms[y][x + 1];
         }
     }
+
+    // Assign the quest treasure room and exit coordinates at creation
+    int randomX = rollDice(WIDTH) -1;
+    int randomY = rollDice(HEIGHT) -1;
+    int randomX2 = rollDice(WIDTH) -1;
+    int randomY2 = rollDice(HEIGHT) -1;
+    while(randomX == randomX2 && randomY == randomY2){
+        randomX2 = rollDice(WIDTH) -1;
+        randomY2 = rollDice(HEIGHT) -1;
+    }
+    dungeon->questX = randomX;
+    dungeon->questY = randomY;
+    dungeon->exitX = randomX2;
+    dungeon->exitY = randomY2;
     
     dungeon->player = dungeon->rooms[0][0];
     dungeon->player->visited = 1;

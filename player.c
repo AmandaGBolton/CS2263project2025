@@ -71,6 +71,11 @@ void equipStartingPlayer(Player *player) {
 
 // Heal for the given number of HP, checking against max HP
 void healPlayer(Player *player, int hpRegained){
+    int currentPotions = getCurrentPotions(player);
+    if (currentPotions == 0) {
+        printf("You have no potions to use!\n");
+        return;
+    }
     int currentHP = player->hp;
     currentHP += 5;
     //Check if over max and reduce if needed
@@ -78,6 +83,8 @@ void healPlayer(Player *player, int hpRegained){
         currentHP = 20;
     }
     player->hp = currentHP;
+    printf("You have healed for %d HP. You now have %d HP.\n", hpRegained, currentHP);
+    dropItem(player->inventory, "potion belt", 1);
 }
 
 void isPlayerDead(Player *player, int damage){
@@ -162,28 +169,18 @@ void adjustStats(Player *player) {
     free(temp);
 }
 
-// int main() {
+int hasGoblet(Player *player) {
+    if (player == NULL || player->inventory == NULL) {
+        return 0; // Player or inventory is NULL, goblet not found
+    }
 
-//     // Ask player for name and check length
-//     char* playerName;
-//     printf("What is your name? (Max 20 characters) ");
-//     scanf(" %c", &playerName);
-//     if(playerName[0]=="\0") {
-//         playerName = "Bob";
-//         printf("No name? We'll call you Bob then.\n");
-//     } else if (strlen(playerName)>20) {
-//         printf("\nThat is too long! Please choose something shorter.");
-//         scanf(" %c", &playerName);
-//     }
-//     if (strlen(playerName)>20) {
-//         printf("\nThat is too long! We'll just call you Bob then.\n");
-//         playerName = "Bob";
-//     }
-//     printf("Welcome to the game %c!\n", playerName);
-    
-//     struct Player * currentPlayer;
-//     currentPlayer = createPlayer(20, 1, 1, 0, playerName);
-    
-//     return 0;
-// }
+    Inventory *current = player->inventory;
+    while (current != NULL) {
+        if (strcmp(current->item->stat, "QUEST") == 0) {
+            return 1; // Goblet found
+        }
+        current = current->next;
+    }
 
+    return 0; // Goblet not found
+}

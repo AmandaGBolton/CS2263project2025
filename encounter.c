@@ -47,7 +47,7 @@ void describeShop(Inventory * inventory){
     }
 }
 
-void purchaseDialog(Player *player, Inventory *shop) {
+void purchaseDialog(Player *player, Inventory *shop, Scenario * scenario) {
     char input;
     char name[50];
 
@@ -71,7 +71,18 @@ void purchaseDialog(Player *player, Inventory *shop) {
                 }
 
                 // Attempt to purchase the item
-                purchaseItem(player, shop, name);
+                shop = purchaseItem(player, shop, name);
+
+                // Update the scenario's inventory pointer
+                if (scenario != NULL) {
+                    scenario->encounter->inventory = shop;
+                }
+
+                // Check if the shop is now empty
+                if (shop == NULL) {
+                    printf("The shop is now empty.\n");
+                    return; // Exit the dialog if the shop is empty
+                }
 
                 // Break out of the inner loop to re-prompt for Y/N
                 break;
@@ -86,11 +97,11 @@ void purchaseDialog(Player *player, Inventory *shop) {
 }
 
 // Checks for sufficient gold, does inventory management
-void purchaseItem(Player *player, Inventory *shop, char *itemName) {
-    // Get the item from the inventory
+Inventory *purchaseItem(Player *player, Inventory *shop, char *itemName) {
     Inventory *current = shop;
     Inventory *prev = NULL;
 
+    // Traverse the shop inventory to find the item
     while (current != NULL) {
         if (strcmp(current->item->name, itemName) == 0) {
             break;
@@ -99,36 +110,42 @@ void purchaseItem(Player *player, Inventory *shop, char *itemName) {
         current = current->next;
     }
 
+    // If the item is not found
     if (current == NULL) {
         printf("Item %s not found in shop inventory.\n", itemName);
-        return;
+        return shop; // Return the unchanged shop
     }
 
-    // Check if player has enough gold
+    // Check if the player has enough gold
     int currentGold = getCurrentGold(player);
     if (currentGold < 5) {
         printf("You do not have enough gold to purchase %s.\n", itemName);
-        return;
+        return shop; // Return the unchanged shop
     }
 
     // Deduct gold from the player's inventory
     dropItem(player->inventory, "coin purse", 5);
 
-    // Create a copy of the item and add it to the player's inventory
-    Item *itemCopy = createItem(current->item->stat, current->item->mod, current->item->name);
-    pickUpItem(player, itemCopy);
+    // Add the item to the player's inventory
+    pickUpItem(player, current->item);
 
     // Remove the item from the shop inventory
     if (prev == NULL) {
-        shop = current->next;
+        shop = current->next; // Update the shop head if the first item is removed
     } else {
         prev->next = current->next;
     }
- 
-    free(current->item); // Free the original item in the shop
-    free(current);       // Free the shop inventory node
+
+    free(current); // Free the shop inventory node
 
     printf("You purchased %s.\n", itemName);
+
+    // Check if the shop is now empty
+    if (shop == NULL) {
+        printf("The shop is now empty.\n");
+    }
+
+    return shop; // Return the updated shop
 }
 
 Encounter * createQuestEncounter(){
@@ -138,7 +155,7 @@ Encounter * createQuestEncounter(){
 }
 
 Encounter * createExitEncounter() {
-    return createEncounter("You have found the exit. You can return to the village! Would you like to leave?\n", NULL, "Thank you for playing!\n");
+    return createEncounter("You have found the exit. If you have the magical goblet, you can return to the village!\n", NULL, "(Thank you for playing!)\n");
 }
 
 Encounter * createDwarfNPC() {
