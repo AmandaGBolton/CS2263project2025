@@ -164,7 +164,13 @@ Dungeon *loadDungeon(const char *filename) {
     while (fgets(buffer, sizeof(buffer), file)) {
         if (strncmp(buffer, "PLAYER", 6) == 0) {
             sscanf(buffer, "PLAYER %d %d", &x, &y);
-            dungeon->player = dungeon->rooms[y][x];
+            if (!dungeon->rooms[y][x]) {
+                printf("Warning: loaded player position (%d, %d) is invalid. Defaulting to (0, 0)\n", x, y);
+                dungeon->player = dungeon->rooms[0][0];
+            } else {
+                dungeon->player = dungeon->rooms[y][x];
+            }
+            dungeon->player->visited = 1;
             break;
         }
     }
