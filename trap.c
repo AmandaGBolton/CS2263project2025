@@ -125,7 +125,7 @@ Trap * rotatingRoomTrap() {
 
 // These are the not-traps but it is easier to just lump this together.
 Trap * emptyRoom() {
-    Item * reward = createItem("GOLD", 5, "coin purse");
+    Item * reward = createItem("GOLD", 1, "coin purse");
     Trap * empty = createTrap("You enter the room and see nothing but dust and cobwebs.", "You sneeze loudly.", "You look around the room and manage to find one gold.", 0, "NONE", 5, reward);
     return empty;
 }
