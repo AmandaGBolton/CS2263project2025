@@ -57,9 +57,7 @@ void triggerScenario(Scenario * scenario, Player * player){
     if (scenario->trap != NULL){
         attemptTrap(player, scenario->trap);
     } else if (scenario->encounter != NULL){
-        printf("ENCOUNTER");
         printf("%s", scenario->encounter->prompt);
-        printf("INVENTORY CHECK %s", scenario->encounter->inventory->item->name);
          // Check if the prompt contains "5 gold"
         if (strstr(scenario->encounter->prompt, "5 gold") != NULL) {
             if (scenario->encounter->inventory != NULL) {

@@ -48,15 +48,18 @@ int main(int argc, char **argv) {
         scanf(" %c", &command);
         if (command == 'Q' || command == 'q') break;
         if (command == 'H' || command == 'h') {
-            healPlayer(currentPlayer, 1);
+            healPlayer(currentPlayer, 5);
             continue;
         }
         if (command == 'i' || command == 'I') {
             displayInventory(currentPlayer->inventory);
             continue;
         }
-        movePlayer(dungeon, command);
+        int oldX = dungeon->player->x;
+        int oldY = dungeon->player->y;
 
+        movePlayer(dungeon, command);
+        
         // Get the player's current position
         int currentX = dungeon->player->x;
         int currentY = dungeon->player->y;
@@ -80,11 +83,14 @@ int main(int argc, char **argv) {
             if(currentX == dungeon->exitX && currentY == dungeon->exitY) {
                     if(hasGoblet(currentPlayer) == 1) {
                     printf("You have found the exit with the goblet and have won the game!\n");
-                    break;
+                    EXIT_SUCCESS;
                     }
             }
         }
 
+        if (oldX == currentX && oldY == currentY) {
+            continue;
+        }
         triggerScenario(dungeon->rooms[currentY][currentX]->scenario, currentPlayer);
     }
 

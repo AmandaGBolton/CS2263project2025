@@ -39,7 +39,6 @@ void freeEncounter(Encounter * encounter){
 }
 
 void describeShop(Inventory * inventory){
-    printf("DESCRIBE SHOP");
     Inventory * current = inventory;
     printf("Welcome to the shop! Here is what we have for sale:\n");
     while (current != NULL){
@@ -49,7 +48,6 @@ void describeShop(Inventory * inventory){
 }
 
 void purchaseDialog(Player *player, Inventory *shop, Scenario * scenario) {
-    printf("PURCHAEDIALOG)\n");
     char input;
     char name[50];
 
